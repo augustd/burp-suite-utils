@@ -11,7 +11,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 /**
- *
+ * This class abstracts everything needed to create a custom passive scan. 
+ * Extend this class to create a passive scan: 
+ * <ol>
+ * <li>Set the extension name</li>
+ * <li>Add MatchRules</li>
+ * <li>implement getScanIssue() to return a custom scan issue</li>
+ * </ol>
+ * 
  * @author August Detlefsen <augustd at codemagi dot com>
  */
 public abstract class PassiveScan extends BaseExtender implements IScannerCheck {
@@ -22,7 +29,7 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
     protected void initialize() {
 	//set the extension Name
 	extensionName = "Base Passive Scan";
-	
+
 	// register the extension as a custom scanner check
 	callbacks.registerScannerCheck(this);
     }
@@ -33,25 +40,17 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
      * @param baseRequestResponse  The request response pair being analyzed
      * @param matches  A list of matches found by the scanner
      * @param startStop  A list of integers marking start and stop points of matches 
-     * @return The name of the issue to be added. 
+     * @return The scan issue to be added. 
      */
     protected abstract IScanIssue getScanIssue(IHttpRequestResponse baseRequestResponse, List<ScannerMatch> matches, List<int[]> startStop);
 
     /**
-     * Implement the getIssueName method to return the name of an issue to be added to Burp's Scanner tab.
-     * 
-     * @return The name of the issue to be added. 
+     * Add a new match rule to the scan
      */
-    protected abstract String getIssueName();
-
-    /**
-     * Implement the getDetail method to return the detail portion of an issue to be added to Burp's Scanner tab.
-     * 
-     * @param matches
-     * @return The detail of the issue to be added. 
-     */
-    protected abstract String getIssueDetail(List<ScannerMatch> matches);
-
+    protected void addMatchRule(MatchRule newRule) {
+	rules.add(newRule);
+    }
+    
     /**
      * implement IScannerCheck
      */
@@ -72,8 +71,6 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 	for (MatchRule rule : rules) {
 	    Matcher matcher = rule.getPattern().matcher(response);
 	    while (matcher.find()) {
-		callbacks.printOutput(getIssueName() + " - " + rule.getType() + "!");
-		
 		//get the actual match
 		String group;
 		if (rule.getMatchGroup() != null) {
@@ -83,7 +80,7 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 		}
 		
 		callbacks.printOutput("start: " + matcher.start() + " end: " + matcher.end() + " group: " + group);
-		matches.add(new ScannerMatch(matcher.start(), matcher.end(), group, rule.getType(), rule.getSeverity()));
+		matches.add(new ScannerMatch(matcher.start(), matcher.end(), group, rule));
 	    }
 	}
 	
