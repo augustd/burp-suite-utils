@@ -27,6 +27,14 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
 	this.severity = severity;
     }
 
+    public ScannerMatch(Integer start, int end, String match, MatchRule rule) {
+	this.start = start;
+	this.end = end;
+	this.match = match;
+	this.type = rule.getType();
+	this.severity = rule.getSeverity();
+    }
+
     public int getStart() {
 	return start;
     }

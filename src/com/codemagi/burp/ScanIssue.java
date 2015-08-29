@@ -1,9 +1,12 @@
 package com.codemagi.burp;
 
+import burp.IBurpExtenderCallbacks;
+import burp.IExtensionHelpers;
 import burp.IHttpRequestResponse;
 import burp.IHttpService;
 import burp.IScanIssue;
 import java.net.URL;
+import java.util.List;
 
 /**
  *
@@ -30,6 +33,25 @@ public class ScanIssue implements IScanIssue {
 	this.httpService = httpService;
 	this.url = url;
 	this.httpMessages = httpMessages;
+	this.name = name;
+	this.detail = detail;
+	this.severity = severity;
+	this.confidence = confidence;
+    }
+    
+    public ScanIssue(
+	    IHttpRequestResponse baseRequestResponse, 
+	    IExtensionHelpers helpers,
+	    IBurpExtenderCallbacks callbacks,
+	    List<int[]> offsets,
+	    String name,
+	    String detail,
+	    String severity,
+	    String confidence) {
+	
+	this.httpService = baseRequestResponse.getHttpService();
+	this.url = helpers.analyzeRequest(baseRequestResponse).getUrl();
+	this.httpMessages = new IHttpRequestResponse[]{callbacks.applyMarkers(baseRequestResponse, null, offsets)};
 	this.name = name;
 	this.detail = detail;
 	this.severity = severity;
