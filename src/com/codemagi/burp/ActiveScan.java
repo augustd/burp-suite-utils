@@ -129,16 +129,6 @@ public abstract class ActiveScan extends BaseExtender implements IScannerCheck {
 
 		// report the issue
 		issues.add(getScanIssue(checkRequestResponse, matches, requestHighlights, responseHighlights));
-		/*
-		issues.add(new CustomScanIssue(
-			baseRequestResponse.getHttpService(),
-			helpers.analyzeRequest(baseRequestResponse).getUrl(),
-			new IHttpRequestResponse[]{callbacks.applyMarkers(checkRequestResponse, requestHighlights, matches)},
-			"Server Side Javascript Injection",
-			description.toString(),
-			"High",
-			"Tentative"));
-		*/
 	    }
 	}
 	
