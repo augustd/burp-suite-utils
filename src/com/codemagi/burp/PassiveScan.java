@@ -29,13 +29,21 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
     protected void initialize() {
 	//set the extension Name
 	extensionName = "Base Passive Scan";
+	
+	//call the subclass initializer
+	initPassiveScan();
 
 	// register the extension as a custom scanner check
 	callbacks.registerScannerCheck(this);
     }
     
     /**
-     * Implement the getIssueName method to return the name of an issue to be added to Burp's Scanner tab.
+     * Implement this method to perform passive scan specific initialization. 
+     */
+    protected abstract void initPassiveScan();
+    
+    /**
+     * Implement the getScanIssue method to return the name of an issue to be added to Burp's Scanner tab.
      * 
      * @param baseRequestResponse  The request response pair being analyzed
      * @param matches  A list of matches found by the scanner
