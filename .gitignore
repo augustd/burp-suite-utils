@@ -3,9 +3,4 @@
 /dist/
 /manifest.mf
 /lib/nblibraries.properties
-/nbproject/genfiles.properties
-/nbproject/build-impl.xml
 /lib/CopyLibs/org-netbeans-modules-java-j2seproject-copylibstask.jar
-/nbproject/project.xml
-/nbproject/project.properties
-/build.xml
