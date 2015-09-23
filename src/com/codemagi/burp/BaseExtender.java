@@ -4,6 +4,7 @@ import burp.IBurpExtender;
 import burp.IBurpExtenderCallbacks;
 import burp.IExtensionHelpers;
 import java.io.OutputStream;
+import java.io.PrintStream;
 
 /**
  *
@@ -15,6 +16,7 @@ public abstract class BaseExtender implements IBurpExtender {
     protected IBurpExtenderCallbacks callbacks;
     protected IExtensionHelpers helpers;
     protected OutputStream stdout;
+    protected OutputStream stderr;
 
     /**
      * implement IBurpExtender
@@ -28,8 +30,9 @@ public abstract class BaseExtender implements IBurpExtender {
 	// obtain an extension helpers object
 	helpers = callbacks.getHelpers();
 	
-	//get the stdout stream for info messages
+	//get the output streams for info and error messages
 	stdout = callbacks.getStdout();
+	stderr = callbacks.getStderr();
 	
 	//initialize the extension
 	initialize();
@@ -45,5 +48,12 @@ public abstract class BaseExtender implements IBurpExtender {
      * This method will be called in registerExtenderCallbacks after the callbacks and helpers have been loaded.
      */
     protected abstract void initialize();
+    
+    /**
+     * Print a stack trace to the extender errors UI
+     */
+    protected void printStackTrace(Exception e) {
+        e.printStackTrace(new PrintStream(stderr));
+    }
     
 }
