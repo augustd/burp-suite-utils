@@ -8,18 +8,24 @@ import javax.swing.JComboBox;
  */
 public enum ScanIssueConfidence {
 
-    CERTAIN("Certain"),
-    FIRM("Firm"),
-    TENTATIVE("Tentative");
+    CERTAIN("Certain", 30),
+    FIRM("Firm", 20),
+    TENTATIVE("Tentative", 10);
 
     private final String name;
+    private final int value;
 
-    private ScanIssueConfidence(String name) {
+    private ScanIssueConfidence(String name, int value) {
 	this.name = name;
+        this.value = value;
     }
 
     public String getName() {
 	return name;
+    }
+    
+    public int getValue() {
+	return value;
     }
     
     public static JComboBox getComboBox() {
