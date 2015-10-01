@@ -54,24 +54,48 @@ public class MatchRule {
 	return test;
     }
 
+    public void setTest(String test) {
+        this.test = test;
+    }
+
     public Pattern getPattern() {
 	return pattern;
+    }
+
+    public void setPattern(Pattern pattern) {
+        this.pattern = pattern;
     }
 
     public Integer getMatchGroup() {
 	return matchGroup;
     }
 
+    public void setMatchGroup(Integer matchGroup) {
+        this.matchGroup = matchGroup;
+    }
+
     public String getType() {
 	return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public ScanIssueSeverity getSeverity() {
 	return severity;
     }
 
+    public void setSeverity(ScanIssueSeverity severity) {
+        this.severity = severity;
+    }
+
     public ScanIssueConfidence getConfidence() {
 	return confidence;
+    }
+    
+    public void setConfidence(ScanIssueConfidence confidence) {
+        this.confidence = confidence;
     }
     
 }

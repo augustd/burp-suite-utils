@@ -55,8 +55,27 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
     /**
      * Add a new match rule to the scan
      */
-    protected void addMatchRule(MatchRule newRule) {
+    public void addMatchRule(MatchRule newRule) {
 	rules.add(newRule);
+    }
+    
+    /**
+     * Remove match rule from the scan
+     */
+    public void removeMatchRule(int index) {
+	rules.remove(index);
+    }
+    
+    /**
+     * Get an existing match rule of the scan. 
+     * 
+     * If no match rule exists at the specified index, this method returns null.
+     */
+    public MatchRule getMatchRule(int index) {
+        if (index < rules.size()) {
+            return rules.get(index);
+        } 
+        return null;
     }
     
     /**

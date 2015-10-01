@@ -11,6 +11,7 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
     private String match;
     private String type;
     private ScanIssueSeverity severity;
+    private ScanIssueConfidence confidence;
 
     public ScannerMatch(int start, int end, String match, String type) {
 	this.start = start;
@@ -33,6 +34,7 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
 	this.match = match;
 	this.type = rule.getType();
 	this.severity = rule.getSeverity();
+        this.confidence = rule.getConfidence();
     }
 
     public int getStart() {
@@ -53,6 +55,10 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
 
     public ScanIssueSeverity getSeverity() {
 	return severity;
+    }
+
+    public ScanIssueConfidence getConfidence() {
+        return confidence;
     }
     
     @Override
