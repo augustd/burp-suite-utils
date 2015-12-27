@@ -67,6 +67,13 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
     }
     
     /**
+     * Clear all match rules from the scan
+     */
+    public void clearMatchRules() {
+        rules.clear();
+    }
+    
+    /**
      * Get an existing match rule of the scan. 
      * 
      * If no match rule exists at the specified index, this method returns null.
