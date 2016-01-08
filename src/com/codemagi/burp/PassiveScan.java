@@ -29,6 +29,9 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
     protected void initialize() {
 	//set the extension Name
 	extensionName = "Base Passive Scan";
+        
+        //set the settings namespace (subclasses should override this)
+        settingsNamespace = "PS_";
 	
 	//call the subclass initializer
 	initPassiveScan();

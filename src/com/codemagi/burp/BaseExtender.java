@@ -13,6 +13,11 @@ import java.io.PrintStream;
 public abstract class BaseExtender implements IBurpExtender {
     
     protected String extensionName = "Base Extension";
+    
+    /**
+     * The settingsNamespace should be overridden by subclasses. It is appended to settings which will be saved in the Burp state. 
+     */
+    protected String settingsNamespace = "BE_";
     protected IBurpExtenderCallbacks callbacks;
     protected IExtensionHelpers helpers;
     protected OutputStream stdout;
@@ -54,6 +59,10 @@ public abstract class BaseExtender implements IBurpExtender {
      */
     protected void printStackTrace(Exception e) {
         e.printStackTrace(new PrintStream(stderr));
+    }
+
+    public String getSettingsNamespace() {
+        return settingsNamespace;
     }
     
 }
