@@ -57,7 +57,7 @@ public abstract class BaseExtender implements IBurpExtender {
     /**
      * Print a stack trace to the extender errors UI
      */
-    protected void printStackTrace(Exception e) {
+    public void printStackTrace(Exception e) {
         e.printStackTrace(new PrintStream(stderr));
     }
 
