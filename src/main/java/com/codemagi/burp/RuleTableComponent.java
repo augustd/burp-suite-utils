@@ -26,8 +26,9 @@ public class RuleTableComponent extends javax.swing.JPanel {
     /**
      * Creates new form BurpSuiteTab
      *
-     * @param scan
-     * @param callbacks For UI Look and Feel
+     * @param passiveScan The scan to initialize this component for
+     * @param callbacks The Burp Extender callbacks object
+     * @param defaultUrl The default URL to load match rules from
      */
     public RuleTableComponent(PassiveScan passiveScan, IBurpExtenderCallbacks callbacks, String defaultUrl) {
 

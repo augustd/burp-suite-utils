@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 /**
  * 
  * @author Monika Morrow Original URL: https://github.com/monikamorrow/Burp-Suite-Extension-Examples/tree/master/GUI%20Utils
- * @contributor August Detlefsen
+ * @author August Detlefsen
  */
 public class BurpSuiteTab extends javax.swing.JPanel implements ITab {
     IBurpExtenderCallbacks mCallbacks;

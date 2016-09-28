@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
  * <li>implement getScanIssue() to return a custom scan issue</li>
  * </ol>
  * 
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public abstract class PassiveScan extends BaseExtender implements IScannerCheck {
 
@@ -57,6 +57,8 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 
     /**
      * Add a new match rule to the scan
+     * 
+     * @param newRule match rule to add
      */
     public void addMatchRule(MatchRule newRule) {
 	rules.add(newRule);
@@ -64,6 +66,8 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
     
     /**
      * Remove match rule from the scan
+     * 
+     * @param index Index of the match rule to remove
      */
     public void removeMatchRule(int index) {
 	rules.remove(index);
@@ -80,6 +84,9 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
      * Get an existing match rule of the scan. 
      * 
      * If no match rule exists at the specified index, this method returns null.
+     * 
+     * @param index Index of the match rule to return
+     * @return The match rule at the specified index, or null if none exists
      */
     public MatchRule getMatchRule(int index) {
         if (index < rules.size()) {

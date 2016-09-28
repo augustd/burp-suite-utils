@@ -28,7 +28,7 @@ import java.util.regex.*;
  * Note that parameters sent in the body of POST requests are not parsed.
  * Instead they are stored as-is in the 'body' member.
  *
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public class HttpRequest {
 
@@ -55,7 +55,7 @@ public class HttpRequest {
      * the 'url' parameter. A 'Host' header will be set with the host portion of 
      * the 'url' parameter.
      * 
-     * @param url 
+     * @param url The URL to construct a request for
      */
     public HttpRequest(URL url) {
 	this.method = "GET";
@@ -129,6 +129,7 @@ public class HttpRequest {
      * If the map of sorted headers has already been created that will be returned. 
      * Otherwise, a new LinkedHashMap will be constructed and cached for future use.
      *  
+     * @return A LinkedHashMap containing the sorted HTTP headers, using the header names as the hash key
      * @see java.util.LinkedHashMap
      */
     public LinkedHashMap getHeadersSorted() {
@@ -155,6 +156,8 @@ public class HttpRequest {
     /**
      * Sets a header field value based on its name.  
      * 
+     * @param name The header name to set
+     * @param value The header value to set
      * @return the previous value or null if the field was previously unset.
      */
     public final String setHeader(String name, String value) {
@@ -168,6 +171,9 @@ public class HttpRequest {
 
     /**
      * Sets a parameter value based on its name.  
+     * 
+     * @param name The parameter name to set
+     * @param value The parameter value to set
      * @return the previous value or null if the field was previously unset.
      */
     public String setParameter(String name, String value) {
@@ -182,6 +188,7 @@ public class HttpRequest {
      * If the map of sorted parameters has already been created that will be returned. 
      * Otherwise, a new LinkedHashMap will be constructed and cached for future use.
      *  
+     * @return A LinkedHashMap containing the sorted HTTP parameters, using the parameter name as the key
      * @see java.util.LinkedHashMap
      */
     public LinkedHashMap getParametersSorted() {
@@ -207,6 +214,10 @@ public class HttpRequest {
 
     /**
      * Parses a new HttpMessage using {@link #parse(InputStream)} with out as null.  
+     * 
+     * @param in The InputStream to parse
+     * @return An HttpMessage object parsed from the InputStream
+     * @throws java.io.IOException Any IO Exceptions will be thrown
      */
     public static HttpRequest parseMessage(InputStream in) throws IOException {
 	HttpRequest m = new HttpRequest();
@@ -216,6 +227,10 @@ public class HttpRequest {
 
     /**
      * Parses a new HttpMessage using {@link #parse(InputStream)} with out as null.  
+     * 
+     * @param in The array of bytes to parse
+     * @return An HttpMessage object parsed from the array
+     * @throws java.io.IOException Any IO Exceptions will be thrown
      */
     public static HttpRequest parseMessage(byte[] in) throws IOException {
 	HttpRequest m = new HttpRequest();

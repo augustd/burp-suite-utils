@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public class ScanIssue implements IScanIssue {
     

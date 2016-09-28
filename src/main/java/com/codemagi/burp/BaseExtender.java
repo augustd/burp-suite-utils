@@ -8,7 +8,7 @@ import java.io.PrintStream;
 
 /**
  *
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public abstract class BaseExtender implements IBurpExtender {
     
@@ -56,6 +56,8 @@ public abstract class BaseExtender implements IBurpExtender {
     
     /**
      * Print a stack trace to the extender errors UI
+     * 
+     * @param e Exception to print stack trace for. 
      */
     public void printStackTrace(Exception e) {
         e.printStackTrace(new PrintStream(stderr));

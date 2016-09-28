@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public class MatchRule {
     private String test;

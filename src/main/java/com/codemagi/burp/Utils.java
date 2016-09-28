@@ -10,7 +10,7 @@ import java.util.Locale;
 
 /**
  *
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public class Utils {
 
@@ -51,6 +51,9 @@ public class Utils {
 
     /**
      * Converts null Strings to empty String ("").
+     * 
+     * @param test String to convert
+     * @return The original String, or "" if the input is null
      */
     public static String noNulls(String test) {
 	return noNulls(test, test, "");
@@ -77,6 +80,7 @@ public class Utils {
     /**
      * Converts null Objects to empty String ("").
      *
+     * @param input The object to test for null-ness
      * @return Object Empty String if the input was null, the input unchanged
      * otherwise
      */

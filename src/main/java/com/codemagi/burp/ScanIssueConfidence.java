@@ -4,7 +4,7 @@ import javax.swing.JComboBox;
 
 /**
  *
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public enum ScanIssueConfidence {
 

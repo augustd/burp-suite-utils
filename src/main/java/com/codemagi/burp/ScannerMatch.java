@@ -2,7 +2,7 @@ package com.codemagi.burp;
 
 /**
  *
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public class ScannerMatch implements Comparable<ScannerMatch> {
 

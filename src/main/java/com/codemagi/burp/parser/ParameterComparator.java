@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Sorts HTTP parameters by character code. Sorting is <u>case sensitive</u>, i.e. parameter 'UserName' comes BEFORE 'maxItems'.
  * 
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public class ParameterComparator implements java.util.Comparator<Map.Entry> {
 

@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Sorts HTTP headers by <u>lower case</u> character code.
  * 
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public class HeaderComparator implements java.util.Comparator<Map.Entry> {
 

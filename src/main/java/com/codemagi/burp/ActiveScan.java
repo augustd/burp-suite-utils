@@ -24,7 +24,7 @@ import java.util.Collections;
  * <li>implement getScanIssue() to return a custom scan issue</li>
  * </ol>
  * 
- * @author August Detlefsen <augustd at codemagi dot com>
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public abstract class ActiveScan extends BaseExtender implements IScannerCheck {
     
@@ -62,6 +62,8 @@ public abstract class ActiveScan extends BaseExtender implements IScannerCheck {
 
     /**
      * Add a new match rule to the scan
+     * 
+     * @param newRule match rule to add
      */
     protected void addMatchRule(MatchRule newRule) {
 	rules.add(newRule);
