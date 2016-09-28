@@ -29,10 +29,10 @@ public class RuleTableComponent extends javax.swing.JPanel {
      * @param scan
      * @param callbacks For UI Look and Feel
      */
-    public RuleTableComponent(PassiveScan scan, IBurpExtenderCallbacks callbacks, String defaultUrl) {
+    public RuleTableComponent(PassiveScan passiveScan, IBurpExtenderCallbacks callbacks, String defaultUrl) {
 
 	mCallbacks = callbacks;
-	this.scan = scan;
+	this.scan = passiveScan;
         this.DEFAULT_URL = defaultUrl;
 
 	initComponents();
@@ -46,8 +46,9 @@ public class RuleTableComponent extends javax.swing.JPanel {
         loadMatchRules(urlTextField.getText()); 
 
         //add a listener for changes to the table model
-        DefaultTableModel model = (DefaultTableModel)rules.getModel();
+        final DefaultTableModel model = (DefaultTableModel)rules.getModel();
         model.addTableModelListener(new TableModelListener() {
+            @Override
             public void tableChanged(TableModelEvent e) {
                 if (TableModelEvent.UPDATE == e.getType()) {
                     mCallbacks.printOutput(e.toString());
