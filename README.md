@@ -1,5 +1,5 @@
 # burp-suite-utils
-Utilities for creating Burp Suite Extensions, including the Burp Extensions API interfaces. 
+Utilities for creating Burp Suite Extensions, including the [Burp Extensions API](https://portswigger.net/burp/extender/api/index.html) interfaces. 
 
 View our [AppSec USA 2015 presentaton about this project](http://www.slideshare.net/AugustDetlefsen/appsec-usa-2015-customizing-burp-suite) on SlideShare.
 
