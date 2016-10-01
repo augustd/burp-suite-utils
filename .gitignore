@@ -1,13 +1,1 @@
-/nbproject/private/
-/build/
-/dist/
-/manifest.mf
-/lib/CopyLibs/org-netbeans-modules-java-j2seproject-copylibstask.jar
-
-nbproject/build-impl.xml
-
-nbproject/genfiles.properties
-
-nbproject/project.properties
-
-nbproject/project.xml
+/target/
