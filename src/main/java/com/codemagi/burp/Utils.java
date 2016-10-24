@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,6 +21,23 @@ public class Utils {
      * Block constructor by design
      */
     private Utils() {
+    }
+    
+    /**
+     * Returns the user-selected text in the passed array.
+     * 
+     * @param message  The array of bytes to get the selection from
+     * @param offsets  The offsets within the array that indicate the start and end points of the selection
+     * @return A String representing the selected bytes. If offsets is null or if both values are the same, "" is returned.
+     */
+    public static String getSelection(byte[] message, int[] offsets) {
+        if (offsets == null || message == null) return "";
+        
+        if (offsets.length < 2 || offsets[0] == offsets[1]) return "";
+        
+        byte[] selection = Arrays.copyOfRange(message, offsets[0], offsets[1]);
+        
+        return new String(selection);
     }
 
     /**
