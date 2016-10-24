@@ -37,9 +37,9 @@ public class HttpRequest {
     protected String path;
     protected String version;
     protected String body;
-    protected LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>();
+    protected LinkedHashMap<String, String> headers = new LinkedHashMap<>();
     protected LinkedHashMap<String, String> sortedHeaders = null;
-    protected LinkedHashMap<String, String> params = new LinkedHashMap<String, String>();
+    protected LinkedHashMap<String, String> params = new LinkedHashMap<>();
     protected LinkedHashMap<String, String> sortedParams = null;
 
     /**
@@ -168,6 +168,28 @@ public class HttpRequest {
     public String getHeader(String name) {
 	return headers.get(name);
     }
+    
+    /**
+     * Gets the value of the Cookie header
+     */
+    public List<Cookie> getCookies() {
+        String cookies = getHeader("Cookie");
+        List<Cookie> output = new ArrayList<>();
+        
+        for (String cookieStr : cookies.split("[; ]+")) {
+            String[] pair = cookieStr.split("=", 2);
+            output.add(new Cookie(pair[0], pair[1]));
+        }
+        return output;
+    }
+    
+    public void setCookies(List<Cookie> cookies) {
+        StringBuilder buffer = new StringBuilder(cookies.size() * 40);
+        for (Cookie cookie : cookies) {
+            buffer.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
+        }
+        setHeader("Cookie", buffer.toString());
+    }
 
     /**
      * Sets a parameter value based on its name.  
@@ -237,6 +259,13 @@ public class HttpRequest {
 	m.parse(new ByteArrayInputStream(in));
 	return m;
     }
+    
+    public static HttpRequest parseMessage(String in) throws IOException {
+        if (in != null) {
+            return parseMessage(in.getBytes());
+        }
+        return new HttpRequest();
+    }
 
     /**
      * Parses an http message from an input stream.  The first line of input is
@@ -264,7 +293,7 @@ public class HttpRequest {
 	    }
 
 	    //split the headers into name-value pairs
-	    String[] split = currLine.split(":");
+	    String[] split = currLine.split(": ");
 
 	    String headerName = Utils.trim(split[0]);
 	    String headerValue = Utils.trim(split[1]);
