@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/augustd/burp-suite-utils.svg?branch=master)](https://travis-ci.org/augustd/burp-suite-utils)
+
 # burp-suite-utils
 Utilities for creating Burp Suite Extensions, including the [Burp Extensions API](https://portswigger.net/burp/extender/api/index.html) interfaces. 
 
