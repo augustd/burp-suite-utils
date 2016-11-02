@@ -13,6 +13,8 @@ public class MatchRule {
     private String type;
     private ScanIssueSeverity severity;
     private ScanIssueConfidence confidence;
+    
+    private Integer expectedMatches;  //used for testing in cases where one rule can match multiple patterns
 
     public MatchRule(Pattern pattern, Integer matchGroup, String type) {
 	this.pattern = pattern;
@@ -96,6 +98,14 @@ public class MatchRule {
     
     public void setConfidence(ScanIssueConfidence confidence) {
         this.confidence = confidence;
+    }
+
+    public Integer getExpectedMatches() {
+        return expectedMatches;
+    }
+
+    public void setExpectedMatches(Integer expectedMatches) {
+        this.expectedMatches = expectedMatches;
     }
     
 }
