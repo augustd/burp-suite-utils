@@ -17,3 +17,23 @@ Add the following Maven dependency to pom.xml:
   <version>1.0.0</version>
 </dependency>
 ```
+Add the Maven Shade Plugin to your project's plugins to create a plugin jar that includes all dependencies: 
+
+```xml 
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-shade-plugin</artifactId>
+	<version>2.4.3</version>
+	<executions>
+		<execution>
+			<phase>package</phase>
+			<goals>
+				<goal>shade</goal>
+			</goals>
+			<configuration>
+				<createDependencyReducedPom>false</createDependencyReducedPom>
+			</configuration>
+		</execution>
+	</executions>
+</plugin>
+```
