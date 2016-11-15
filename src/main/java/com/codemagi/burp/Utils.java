@@ -1,5 +1,7 @@
 package com.codemagi.burp;
 
+import burp.ICookie;
+import burp.IResponseInfo;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -39,6 +43,31 @@ public class Utils {
         
         return new String(selection);
     }
+    
+    public static ICookie getCookieByName(IResponseInfo responseInfo, String cookieName) {
+        List<ICookie> cookies = responseInfo.getCookies();
+        for (ICookie cookie : cookies) {
+            if (cookie.getName().equals(cookieName)) return cookie;
+        }
+        return null;
+    }
+    
+    public static String replaceGroup(Pattern regex, String source, int groupToReplace, String replacement) {
+        return replaceGroup(regex, source, groupToReplace, 1, replacement);
+    }
+
+    public static String replaceGroup(Pattern regex, String source, int groupToReplace, int groupOccurrence, String replacement) {
+        Matcher m = regex.matcher(source);
+        for (int i = 0; i < groupOccurrence; i++) {
+            if (!m.find()) {
+                return source; // pattern not met, may also throw an exception here
+            }
+        }
+        return new StringBuilder(source)
+                .replace(m.start(groupToReplace), m.end(groupToReplace), replacement)
+                .toString();
+    }
+
 
     /**
      * Determines if a string is null or empty
