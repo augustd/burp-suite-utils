@@ -58,9 +58,21 @@ public class HttpRequest {
      * @param url The URL to construct a request for
      */
     public HttpRequest(URL url) {
-	this.method = "GET";
+        this(url, "GET");
+    }
 
-	//this.url = url;
+    /**
+     * Constructor for creating an HttpMessage from a URL and an HTTP method.
+     * 
+     * This method will create an HTTP/1.1 request with the URI passed in 
+     * the 'url' parameter. A 'Host' header will be set with the host portion of 
+     * the 'url' parameter
+     * 
+     * @param url The URL to construct a request for
+     * @param method The HTTP method to use for the new request
+     */
+    public HttpRequest(URL url, String method) {
+	this.method = method;
 
 	//set the uri of the request
 	this.path = url.getPath();
@@ -170,6 +182,15 @@ public class HttpRequest {
     }
     
     /**
+     * Sets the Content-Length header to the current size of the request body
+     */
+    public int setContentLength() {
+        int contentLength = Utils.noNulls(body).length();
+        setHeader("Content-Length", contentLength + "");
+        return contentLength;
+    }
+    
+    /**
      * Gets the value of the Cookie header
      */
     public List<Cookie> getCookies() {
@@ -201,6 +222,17 @@ public class HttpRequest {
     public String setParameter(String name, String value) {
 	sortedParams = null;
 	return params.put(name, value);
+    }
+    
+    /**
+     * Sets the body of the HTTP request and updates the Content-Length header.
+     * NOTE: This value will override any parameters previously set
+     * 
+     * @param body The new request body
+     */
+    public void setBody(String body) {
+        this.body = body;
+        this.setContentLength();
     }
 
     /**
