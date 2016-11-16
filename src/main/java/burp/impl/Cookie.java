@@ -1,4 +1,4 @@
-package com.codemagi.burp.parser;
+package burp.impl;
 
 import burp.ICookie;
 import java.util.Date;

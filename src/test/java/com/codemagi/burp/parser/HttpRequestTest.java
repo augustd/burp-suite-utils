@@ -15,6 +15,7 @@
  */
 package com.codemagi.burp.parser;
 
+import burp.impl.Cookie;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;

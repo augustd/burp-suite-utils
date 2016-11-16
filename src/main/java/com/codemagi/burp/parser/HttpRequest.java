@@ -1,5 +1,6 @@
 package com.codemagi.burp.parser;
 
+import burp.impl.Cookie;
 import com.codemagi.burp.Utils;
 import java.io.*;
 import java.net.URL;
