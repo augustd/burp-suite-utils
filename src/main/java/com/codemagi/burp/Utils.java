@@ -1,6 +1,7 @@
 package com.codemagi.burp;
 
 import burp.ICookie;
+import burp.IExtensionHelpers;
 import burp.IResponseInfo;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -161,6 +162,17 @@ public class Utils {
 	}
 	return toHex(data.getBytes());
 
+    }
+    
+    public static byte[] getResponseBody(byte[] response, IExtensionHelpers helpers) {
+        IResponseInfo responseInfo = helpers.analyzeResponse(response);
+        int offset = responseInfo.getBodyOffset();
+        return Arrays.copyOfRange(response, offset, response.length);
+    }
+    
+    public static <T>T getFirst(List<T> list) {
+        if (list == null || list.isEmpty()) return null;
+        return list.get(0);
     }
 
     /**
