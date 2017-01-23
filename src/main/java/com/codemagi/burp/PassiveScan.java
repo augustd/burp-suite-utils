@@ -102,6 +102,10 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 	 */
 	@Override
 	public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse) {
+		return runPassiveScanChecks(baseRequestResponse);
+	}
+
+	protected List<IScanIssue> runPassiveScanChecks(IHttpRequestResponse baseRequestResponse) {
 		List<ScannerMatch> matches = new ArrayList<>();
 		List<IScanIssue> issues = new ArrayList<>();
 
