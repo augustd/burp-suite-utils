@@ -100,8 +100,8 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
      */
     @Override
     public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse) {
-	List<ScannerMatch> matches = new ArrayList<ScannerMatch>();
-	List<IScanIssue> issues = new ArrayList<IScanIssue>();
+	List<ScannerMatch> matches = new ArrayList<>();
+	List<IScanIssue> issues = new ArrayList<>();
 	
 	//get the URL of the requst
 	URL url = helpers.analyzeRequest(baseRequestResponse).getUrl();
