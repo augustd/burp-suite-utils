@@ -90,50 +90,53 @@ public class HttpRequest {
 		return method;
 	}
 
-	public String getPath() {
-		return path;
+    public String getPath() {
+	return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+    
+    public String getVersion() {
+	return version;
+    }
+
+    /**
+     * 
+     * @return The body of the POST request, if there is one
+     */
+    public String getBody() {
+	return Utils.noNulls(body);
+    }
+
+    /**
+     * Converts a GET request to a POST request: changes request method and 
+     * moves any URL parameters to the HTTP message body. 
+     */
+    public void convertToPost() {
+	this.method = "POST";
+	
+	//add parameters, if available 
+	StringBuilder bodyBuilder = new StringBuilder();
+	boolean first = true;
+
+	for (Map.Entry param : params.entrySet()) {
+
+	    if (!first) {
+		bodyBuilder.append("&");
+	    }
+
+	    bodyBuilder.append(param.getKey());
+	    bodyBuilder.append("=");
+	    bodyBuilder.append(param.getValue());
+
+	    first = false;
 	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	/**
-	 *
-	 * @return The body of the POST request, if there is one
-	 */
-	public String getBody() {
-		return Utils.noNulls(body);
-	}
-
-	/**
-	 * Converts a GET request to a POST request: changes request method and
-	 * moves any URL parameters to the HTTP message body.
-	 */
-	public void convertToPost() {
-		this.method = "POST";
-
-		//add parameters, if available 
-		StringBuilder bodyBuilder = new StringBuilder();
-		boolean first = true;
-
-		for (Map.Entry param : params.entrySet()) {
-
-			if (!first) {
-				bodyBuilder.append("&");
-			}
-
-			bodyBuilder.append(param.getKey());
-			bodyBuilder.append("=");
-			bodyBuilder.append(param.getValue());
-
-			first = false;
-		}
-
-		this.body = bodyBuilder.toString();
-		this.params = new LinkedHashMap<>();
-		this.sortedParams = null;
-	}
+      this.body = bodyBuilder.toString();
+      this.params = new LinkedHashMap<>();
+      this.sortedParams = null;
+    }
 
 	/**
 	 * Returns the map of HTTP headers contained in this message, sorted by
