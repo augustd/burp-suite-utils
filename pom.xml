@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.codemagi</groupId>
     <artifactId>burp-suite-utils</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
     <name>Burp Suite Utils</name>
     <description>The Burp Suite Utils project provides developers with APIs for building Burp Suite Extensions.</description>
