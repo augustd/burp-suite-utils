@@ -9,6 +9,13 @@ import burp.IBurpExtenderCallbacks;
 public class ToolsScopeComponent extends javax.swing.JPanel {
 
 	IBurpExtenderCallbacks mCallbacks;
+	
+	private static final String SETTING_PROXY = "O_TOOL_PROXY";
+	private static final String SETTING_REPEATER = "O_TOOL_REPEATER";
+	private static final String SETTING_SCANNER = "O_TOOL_SCANNER";
+	private static final String SETTING_INTRUDER = "O_TOOL_INTRUDER";
+	private static final String SETTING_SEQUENCER = "O_TOOL_SEQUENCER";
+	private static final String SETTING_SPIDER = "O_TOOL_SPIDER";
 
 	/**
 	 * Creates new form BurpSuiteTab
@@ -72,32 +79,32 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
 	public void setToolDefault(int tool, boolean enabled) {
 		switch (tool) {
 			case IBurpExtenderCallbacks.TOOL_PROXY:
-				if (mCallbacks.loadExtensionSetting("O_TOOL_PROXY") == null) {
+				if (mCallbacks.loadExtensionSetting(SETTING_PROXY) == null) {
 					jCheckBoxProxy.setSelected(enabled);
 				}
 				break;
 			case IBurpExtenderCallbacks.TOOL_REPEATER:
-				if (mCallbacks.loadExtensionSetting("O_TOOL_REPEATER") == null) {
+				if (mCallbacks.loadExtensionSetting(SETTING_REPEATER) == null) {
 					jCheckBoxRepeater.setSelected(enabled);
 				}
 				break;
 			case IBurpExtenderCallbacks.TOOL_SCANNER:
-				if (mCallbacks.loadExtensionSetting("O_TOOL_SCANNER") == null) {
+				if (mCallbacks.loadExtensionSetting(SETTING_SCANNER) == null) {
 					jCheckBoxScanner.setSelected(enabled);
 				}
 				break;
 			case IBurpExtenderCallbacks.TOOL_INTRUDER:
-				if (mCallbacks.loadExtensionSetting("O_TOOL_INTRUDER") == null) {
+				if (mCallbacks.loadExtensionSetting(SETTING_INTRUDER) == null) {
 					jCheckBoxIntruder.setSelected(enabled);
 				}
 				break;
 			case IBurpExtenderCallbacks.TOOL_SEQUENCER:
-				if (mCallbacks.loadExtensionSetting("O_TOOL_PROXY") == null) {
+				if (mCallbacks.loadExtensionSetting(SETTING_SEQUENCER) == null) {
 					jCheckBoxProxy.setSelected(enabled);
 				}
 				break;
 			case IBurpExtenderCallbacks.TOOL_SPIDER:
-				if (mCallbacks.loadExtensionSetting("O_TOOL_SPIDER") == null) {
+				if (mCallbacks.loadExtensionSetting(SETTING_SPIDER) == null) {
 					jCheckBoxSpider.setSelected(enabled);
 				}
 				break;
@@ -145,35 +152,35 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
 	 * Save all configured settings
 	 */
 	public void saveSettings() {
-		mCallbacks.saveExtensionSetting("O_TOOL_PROXY", setSetting(jCheckBoxProxy.isSelected()));
-		mCallbacks.saveExtensionSetting("O_TOOL_REPEATER", setSetting(jCheckBoxRepeater.isSelected()));
-		mCallbacks.saveExtensionSetting("O_TOOL_SCANNER", setSetting(jCheckBoxScanner.isSelected()));
-		mCallbacks.saveExtensionSetting("O_TOOL_INTRUDER", setSetting(jCheckBoxIntruder.isSelected()));
-		mCallbacks.saveExtensionSetting("O_TOOL_SEQUENCER", setSetting(jCheckBoxSequencer.isSelected()));
-		mCallbacks.saveExtensionSetting("O_TOOL_SPIDER", setSetting(jCheckBoxSpider.isSelected()));
+		mCallbacks.saveExtensionSetting(SETTING_PROXY, setSetting(jCheckBoxProxy.isSelected()));
+		mCallbacks.saveExtensionSetting(SETTING_REPEATER, setSetting(jCheckBoxRepeater.isSelected()));
+		mCallbacks.saveExtensionSetting(SETTING_SCANNER, setSetting(jCheckBoxScanner.isSelected()));
+		mCallbacks.saveExtensionSetting(SETTING_INTRUDER, setSetting(jCheckBoxIntruder.isSelected()));
+		mCallbacks.saveExtensionSetting(SETTING_SEQUENCER, setSetting(jCheckBoxSequencer.isSelected()));
+		mCallbacks.saveExtensionSetting(SETTING_SPIDER, setSetting(jCheckBoxSpider.isSelected()));
 	}
 
 	/**
 	 * Restores any found saved settings
 	 */
 	public void restoreSavedSettings() {
-		if (mCallbacks.loadExtensionSetting("O_TOOL_PROXY") != null) {
-			jCheckBoxProxy.setSelected(getSetting("O_TOOL_PROXY"));
+		if (mCallbacks.loadExtensionSetting(SETTING_PROXY) != null) {
+			jCheckBoxProxy.setSelected(getSetting(SETTING_PROXY));
 		}
-		if (mCallbacks.loadExtensionSetting("O_TOOL_REPEATER") != null) {
-			jCheckBoxRepeater.setSelected(getSetting("O_TOOL_REPEATER"));
+		if (mCallbacks.loadExtensionSetting(SETTING_REPEATER) != null) {
+			jCheckBoxRepeater.setSelected(getSetting(SETTING_REPEATER));
 		}
-		if (mCallbacks.loadExtensionSetting("O_TOOL_SCANNER") != null) {
-			jCheckBoxScanner.setSelected(getSetting("O_TOOL_SCANNER"));
+		if (mCallbacks.loadExtensionSetting(SETTING_SCANNER) != null) {
+			jCheckBoxScanner.setSelected(getSetting(SETTING_SCANNER));
 		}
-		if (mCallbacks.loadExtensionSetting("O_TOOL_INTRUDER") != null) {
-			jCheckBoxIntruder.setSelected(getSetting("O_TOOL_INTRUDER"));
+		if (mCallbacks.loadExtensionSetting(SETTING_INTRUDER) != null) {
+			jCheckBoxIntruder.setSelected(getSetting(SETTING_INTRUDER));
 		}
-		if (mCallbacks.loadExtensionSetting("O_TOOL_SEQUENCER") != null) {
-			jCheckBoxSequencer.setSelected(getSetting("O_TOOL_SEQUENCER"));
+		if (mCallbacks.loadExtensionSetting(SETTING_SEQUENCER) != null) {
+			jCheckBoxSequencer.setSelected(getSetting(SETTING_SEQUENCER));
 		}
-		if (mCallbacks.loadExtensionSetting("O_TOOL_SPIDER") != null) {
-			jCheckBoxSpider.setSelected(getSetting("O_TOOL_SPIDER"));
+		if (mCallbacks.loadExtensionSetting(SETTING_SPIDER) != null) {
+			jCheckBoxSpider.setSelected(getSetting(SETTING_SPIDER));
 		}
 	}
 
