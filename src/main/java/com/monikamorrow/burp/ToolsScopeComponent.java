@@ -16,6 +16,7 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
 	private static final String SETTING_INTRUDER = "O_TOOL_INTRUDER";
 	private static final String SETTING_SEQUENCER = "O_TOOL_SEQUENCER";
 	private static final String SETTING_SPIDER = "O_TOOL_SPIDER";
+	private static final String SETTING_EXTENDER = "O_TOOL_EXTENDER";
 
 	/**
 	 * Creates new form BurpSuiteTab
@@ -33,6 +34,7 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
 		mCallbacks.customizeUiComponent(jCheckBoxIntruder);
 		mCallbacks.customizeUiComponent(jCheckBoxSequencer);
 		mCallbacks.customizeUiComponent(jCheckBoxSpider);
+		mCallbacks.customizeUiComponent(jCheckBoxExtender);
 
 		restoreSavedSettings();
 	}
@@ -63,6 +65,9 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
 				break;
 			case IBurpExtenderCallbacks.TOOL_SPIDER:
 				jCheckBoxSpider.setEnabled(enabled);
+				break;
+			case IBurpExtenderCallbacks.TOOL_EXTENDER:
+				jCheckBoxExtender.setEnabled(enabled);
 				break;
 			default:
 				break;
@@ -108,6 +113,11 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
 					jCheckBoxSpider.setSelected(enabled);
 				}
 				break;
+			case IBurpExtenderCallbacks.TOOL_EXTENDER:
+				if (mCallbacks.loadExtensionSetting(SETTING_EXTENDER) == null) {
+					jCheckBoxExtender.setSelected(enabled);
+				}
+				break;
 			default:
 				break;
 		}
@@ -140,6 +150,9 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
 			case IBurpExtenderCallbacks.TOOL_SPIDER:
 				selected = jCheckBoxSpider.isSelected() && jCheckBoxSpider.isEnabled();
 				break;
+			case IBurpExtenderCallbacks.TOOL_EXTENDER:
+				selected = jCheckBoxExtender.isSelected() && jCheckBoxExtender.isEnabled();
+				break;
 			case IBurpExtenderCallbacks.TOOL_TARGET:
 				break;
 			default:
@@ -158,6 +171,7 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
 		mCallbacks.saveExtensionSetting(SETTING_INTRUDER, setSetting(jCheckBoxIntruder.isSelected()));
 		mCallbacks.saveExtensionSetting(SETTING_SEQUENCER, setSetting(jCheckBoxSequencer.isSelected()));
 		mCallbacks.saveExtensionSetting(SETTING_SPIDER, setSetting(jCheckBoxSpider.isSelected()));
+		mCallbacks.saveExtensionSetting(SETTING_EXTENDER, setSetting(jCheckBoxExtender.isSelected()));
 	}
 
 	/**
@@ -181,6 +195,9 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
 		}
 		if (mCallbacks.loadExtensionSetting(SETTING_SPIDER) != null) {
 			jCheckBoxSpider.setSelected(getSetting(SETTING_SPIDER));
+		}
+		if (mCallbacks.loadExtensionSetting(SETTING_EXTENDER) != null) {
+			jCheckBoxExtender.setSelected(getSetting(SETTING_EXTENDER));
 		}
 	}
 
@@ -214,6 +231,7 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
         jCheckBoxIntruder = new javax.swing.JCheckBox();
         jCheckBoxSequencer = new javax.swing.JCheckBox();
         jCheckBoxSpider = new javax.swing.JCheckBox();
+        jCheckBoxExtender = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -265,6 +283,14 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
             }
         });
 
+        jCheckBoxExtender.setText("Extender (use with care)");
+        jCheckBoxExtender.setActionCommand("Extender");
+        jCheckBoxExtender.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxExtenderActionPerformed(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(229, 137, 0));
 
@@ -289,13 +315,14 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
                             .addComponent(jCheckBoxSequencer)
                             .addComponent(jCheckBoxIntruder)))
                     .addComponent(jLabel1)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(jCheckBoxExtender))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
@@ -311,7 +338,9 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxScanner)
                     .addComponent(jCheckBoxSpider))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBoxExtender)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addComponent(jLabel3))
         );
 
@@ -342,7 +371,12 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
 		saveSettings();
     }//GEN-LAST:event_jCheckBoxSpiderActionPerformed
 
+    private void jCheckBoxExtenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxExtenderActionPerformed
+        saveSettings();
+    }//GEN-LAST:event_jCheckBoxExtenderActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox jCheckBoxExtender;
     private javax.swing.JCheckBox jCheckBoxIntruder;
     private javax.swing.JCheckBox jCheckBoxProxy;
     private javax.swing.JCheckBox jCheckBoxRepeater;
