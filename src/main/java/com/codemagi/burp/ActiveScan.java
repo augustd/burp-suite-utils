@@ -125,7 +125,7 @@ public abstract class ActiveScan extends BaseExtender implements IScannerCheck {
 				List<int[]> responseHighlights = new ArrayList<>(1);
 				for (ScannerMatch match : matches) {
 					callbacks.printOutput("Processing match: " + match);
-					callbacks.printOutput("    start: " + match.getStart() + " end: " + match.getEnd() + " match: " + match.getMatch() + " match: " + match.getMatch());
+					callbacks.printOutput("    start: " + match.getStart() + " end: " + match.getEnd() + " full match: " + match.getFullMatch() + " group: " + match.getMatchGroup());
 					//add a marker for code highlighting
 					responseHighlights.add(new int[]{match.getStart(), match.getEnd()});
 				}

@@ -107,8 +107,7 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 
 	protected List<IScanIssue> runPassiveScanChecks(IHttpRequestResponse baseRequestResponse) {
 		List<ScannerMatch> matches = new ArrayList<>();
-		List<IScanIssue> issues = new ArrayList<>();
-
+		
 		//get the URL of the requst
 		URL url = helpers.analyzeRequest(baseRequestResponse).getUrl();
 		callbacks.printOutput("Doing passive scan: " + url.toString());
@@ -130,30 +129,41 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 				}
 
 				callbacks.printOutput("start: " + matcher.start() + " end: " + matcher.end() + " group: " + group);
-				matches.add(new ScannerMatch(matcher.start(), matcher.end(), group, rule));
+				matches.add(new ScannerMatch(matcher.start(), matcher.end(), matcher.group(), group, rule));
 			}
 		}
 
-		// report the issues ------------------------
+		// process the matches into reportable issues 
+		List<IScanIssue> issues = processIssues(matches, baseRequestResponse);
+		if (!issues.isEmpty()) return issues;
+
+		return null;
+	}
+
+	/**
+	 * Process scanner matches in to a list of reportable issues. 
+	 * 
+	 * @param matches
+	 * @param baseRequestResponse
+	 * @return the final list of scanner issues to be reported, or null if no issues are found.
+	 */
+	protected List<IScanIssue> processIssues(List<ScannerMatch> matches, IHttpRequestResponse baseRequestResponse) {
+		List<IScanIssue> issues = new ArrayList<>();
 		if (!matches.isEmpty()) {
 			Collections.sort(matches); //matches must be in order
-
 			//get the offsets of scanner matches
 			List<int[]> startStop = new ArrayList<>(1);
 			for (ScannerMatch match : matches) {
 				callbacks.printOutput("Processing match: " + match);
-				callbacks.printOutput("    start: " + match.getStart() + " end: " + match.getEnd() + " match: " + match.getMatch() + " match: " + match.getMatch());
+				callbacks.printOutput("    start: " + match.getStart() + " end: " + match.getEnd() + " full match: " + match.getFullMatch() + " group: " + match.getMatchGroup());
 				//add a marker for code highlighting
 				startStop.add(new int[]{match.getStart(), match.getEnd()});
 			}
-
 			issues.add(getScanIssue(baseRequestResponse, matches, startStop));
-
 			callbacks.printOutput("issues: " + issues.size());
-			return issues;
 		}
-
-		return null;
+		
+		return issues;
 	}
 
 	@Override
@@ -162,12 +172,12 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 	}
 
 	/**
-	 * This method is called when multiple issues are reported for the same URL
-	 * path by the same extension-provided check. The value we return from this
-	 * method determines how/whether Burp consolidates the multiple issues to
-	 * prevent duplication.
+	 * This method is called by Burp Suite when multiple issues are reported for
+	 * the same URL path by the same extension-provided check. The value we
+	 * return from this method determines how/whether Burp consolidates the
+	 * multiple issues to prevent duplication.
 	 *
-	 * Since the issue name is sufficient to identify our issues as different,
+	 * Since the issue detail is sufficient to identify our issues as different,
 	 * if both issues have the same name, only report the existing issue
 	 * otherwise report both issues
 	 *
@@ -184,5 +194,5 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 			return 0;
 		}
 	}
-
+	
 }
