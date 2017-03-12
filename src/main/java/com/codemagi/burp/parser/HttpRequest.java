@@ -90,6 +90,10 @@ public class HttpRequest {
 		return method;
 	}
 
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
     public String getPath() {
 	return path;
     }
