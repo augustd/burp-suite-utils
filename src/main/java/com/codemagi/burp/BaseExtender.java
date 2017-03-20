@@ -23,6 +23,8 @@ public abstract class BaseExtender implements IBurpExtender {
 	protected IExtensionHelpers helpers;
 	protected OutputStream stdout;
 	protected OutputStream stderr;
+	
+	private static IBurpExtender instance;
 
 	/**
 	 * implement IBurpExtender
@@ -39,6 +41,9 @@ public abstract class BaseExtender implements IBurpExtender {
 		//get the output streams for info and error messages
 		stdout = callbacks.getStdout();
 		stderr = callbacks.getStderr();
+		
+		//put this into the local instance variable
+		instance = this;
 
 		//initialize the extension
 		initialize();
@@ -55,6 +60,10 @@ public abstract class BaseExtender implements IBurpExtender {
 	 * after the callbacks and helpers have been loaded.
 	 */
 	protected abstract void initialize();
+
+	public static IBurpExtender getInstance() {
+        return instance;
+    }
 
 	/**
 	 * Print a stack trace to the extender errors UI
