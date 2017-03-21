@@ -8,219 +8,219 @@ import burp.IBurpExtenderCallbacks;
  */
 public class ToolsScopeComponent extends javax.swing.JPanel {
 
-	IBurpExtenderCallbacks mCallbacks;
-	
-	private static final String SETTING_PROXY = "O_TOOL_PROXY";
-	private static final String SETTING_REPEATER = "O_TOOL_REPEATER";
-	private static final String SETTING_SCANNER = "O_TOOL_SCANNER";
-	private static final String SETTING_INTRUDER = "O_TOOL_INTRUDER";
-	private static final String SETTING_SEQUENCER = "O_TOOL_SEQUENCER";
-	private static final String SETTING_SPIDER = "O_TOOL_SPIDER";
-	private static final String SETTING_EXTENDER = "O_TOOL_EXTENDER";
+    IBurpExtenderCallbacks mCallbacks;
 
-	/**
-	 * Creates new form BurpSuiteTab
-	 *
-	 * @param callbacks For UI Look and Feel
-	 */
-	public ToolsScopeComponent(IBurpExtenderCallbacks callbacks) {
-		mCallbacks = callbacks;
+    private static final String SETTING_PROXY = "O_TOOL_PROXY";
+    private static final String SETTING_REPEATER = "O_TOOL_REPEATER";
+    private static final String SETTING_SCANNER = "O_TOOL_SCANNER";
+    private static final String SETTING_INTRUDER = "O_TOOL_INTRUDER";
+    private static final String SETTING_SEQUENCER = "O_TOOL_SEQUENCER";
+    private static final String SETTING_SPIDER = "O_TOOL_SPIDER";
+    private static final String SETTING_EXTENDER = "O_TOOL_EXTENDER";
 
-		initComponents();
+    /**
+     * Creates new form BurpSuiteTab
+     *
+     * @param callbacks For UI Look and Feel
+     */
+    public ToolsScopeComponent(IBurpExtenderCallbacks callbacks) {
+        mCallbacks = callbacks;
 
-		mCallbacks.customizeUiComponent(jCheckBoxProxy);
-		mCallbacks.customizeUiComponent(jCheckBoxRepeater);
-		mCallbacks.customizeUiComponent(jCheckBoxScanner);
-		mCallbacks.customizeUiComponent(jCheckBoxIntruder);
-		mCallbacks.customizeUiComponent(jCheckBoxSequencer);
-		mCallbacks.customizeUiComponent(jCheckBoxSpider);
-		mCallbacks.customizeUiComponent(jCheckBoxExtender);
+        initComponents();
 
-		restoreSavedSettings();
-	}
+        mCallbacks.customizeUiComponent(jCheckBoxProxy);
+        mCallbacks.customizeUiComponent(jCheckBoxRepeater);
+        mCallbacks.customizeUiComponent(jCheckBoxScanner);
+        mCallbacks.customizeUiComponent(jCheckBoxIntruder);
+        mCallbacks.customizeUiComponent(jCheckBoxSequencer);
+        mCallbacks.customizeUiComponent(jCheckBoxSpider);
+        mCallbacks.customizeUiComponent(jCheckBoxExtender);
 
-	/**
-	 * Allows the enabling/disabling of UI tool selection elements, not every
-	 * tool makes sense for every extension
-	 *
-	 * @param tool
-	 * @param enabled
-	 */
-	public void setEnabledToolConfig(int tool, boolean enabled) {
-		switch (tool) {
-			case IBurpExtenderCallbacks.TOOL_PROXY:
-				jCheckBoxProxy.setEnabled(enabled);
-				break;
-			case IBurpExtenderCallbacks.TOOL_REPEATER:
-				jCheckBoxRepeater.setEnabled(enabled);
-				break;
-			case IBurpExtenderCallbacks.TOOL_SCANNER:
-				jCheckBoxScanner.setEnabled(enabled);
-				break;
-			case IBurpExtenderCallbacks.TOOL_INTRUDER:
-				jCheckBoxIntruder.setEnabled(enabled);
-				break;
-			case IBurpExtenderCallbacks.TOOL_SEQUENCER:
-				jCheckBoxSequencer.setEnabled(enabled);
-				break;
-			case IBurpExtenderCallbacks.TOOL_SPIDER:
-				jCheckBoxSpider.setEnabled(enabled);
-				break;
-			case IBurpExtenderCallbacks.TOOL_EXTENDER:
-				jCheckBoxExtender.setEnabled(enabled);
-				break;
-			default:
-				break;
-		}
-	}
+        restoreSavedSettings();
+    }
 
-	/**
-	 * Allows the developer to set the default value for selected tools, not
-	 * every tool makes sense for every extension
-	 *
-	 * @param tool
-	 * @param enabled
-	 */
-	public void setToolDefault(int tool, boolean enabled) {
-		switch (tool) {
-			case IBurpExtenderCallbacks.TOOL_PROXY:
-				if (mCallbacks.loadExtensionSetting(SETTING_PROXY) == null) {
-					jCheckBoxProxy.setSelected(enabled);
-				}
-				break;
-			case IBurpExtenderCallbacks.TOOL_REPEATER:
-				if (mCallbacks.loadExtensionSetting(SETTING_REPEATER) == null) {
-					jCheckBoxRepeater.setSelected(enabled);
-				}
-				break;
-			case IBurpExtenderCallbacks.TOOL_SCANNER:
-				if (mCallbacks.loadExtensionSetting(SETTING_SCANNER) == null) {
-					jCheckBoxScanner.setSelected(enabled);
-				}
-				break;
-			case IBurpExtenderCallbacks.TOOL_INTRUDER:
-				if (mCallbacks.loadExtensionSetting(SETTING_INTRUDER) == null) {
-					jCheckBoxIntruder.setSelected(enabled);
-				}
-				break;
-			case IBurpExtenderCallbacks.TOOL_SEQUENCER:
-				if (mCallbacks.loadExtensionSetting(SETTING_SEQUENCER) == null) {
-					jCheckBoxProxy.setSelected(enabled);
-				}
-				break;
-			case IBurpExtenderCallbacks.TOOL_SPIDER:
-				if (mCallbacks.loadExtensionSetting(SETTING_SPIDER) == null) {
-					jCheckBoxSpider.setSelected(enabled);
-				}
-				break;
-			case IBurpExtenderCallbacks.TOOL_EXTENDER:
-				if (mCallbacks.loadExtensionSetting(SETTING_EXTENDER) == null) {
-					jCheckBoxExtender.setSelected(enabled);
-				}
-				break;
-			default:
-				break;
-		}
-	}
+    /**
+     * Allows the enabling/disabling of UI tool selection elements, not every
+     * tool makes sense for every extension
+     *
+     * @param tool The tool code, as defined in IBurpExtenderCallbacks
+     * @param enabled True if the checkbox should be enabled.
+     */
+    public void setEnabledToolConfig(int tool, boolean enabled) {
+        switch (tool) {
+            case IBurpExtenderCallbacks.TOOL_PROXY:
+                jCheckBoxProxy.setEnabled(enabled);
+                break;
+            case IBurpExtenderCallbacks.TOOL_REPEATER:
+                jCheckBoxRepeater.setEnabled(enabled);
+                break;
+            case IBurpExtenderCallbacks.TOOL_SCANNER:
+                jCheckBoxScanner.setEnabled(enabled);
+                break;
+            case IBurpExtenderCallbacks.TOOL_INTRUDER:
+                jCheckBoxIntruder.setEnabled(enabled);
+                break;
+            case IBurpExtenderCallbacks.TOOL_SEQUENCER:
+                jCheckBoxSequencer.setEnabled(enabled);
+                break;
+            case IBurpExtenderCallbacks.TOOL_SPIDER:
+                jCheckBoxSpider.setEnabled(enabled);
+                break;
+            case IBurpExtenderCallbacks.TOOL_EXTENDER:
+                jCheckBoxExtender.setEnabled(enabled);
+                break;
+            default:
+                break;
+        }
+    }
 
-	/**
-	 * Returns true if the requested tool is selected in the GUI
-	 *
-	 * @param tool
-	 * @return whether the selected tool is selected
-	 */
-	public boolean isToolSelected(int tool) {
-		boolean selected = false;
-		switch (tool) {
-			case IBurpExtenderCallbacks.TOOL_PROXY:
-				selected = jCheckBoxProxy.isSelected() && jCheckBoxProxy.isEnabled();
-				break;
-			case IBurpExtenderCallbacks.TOOL_REPEATER:
-				selected = jCheckBoxRepeater.isSelected() && jCheckBoxRepeater.isEnabled();
-				break;
-			case IBurpExtenderCallbacks.TOOL_SCANNER:
-				selected = jCheckBoxScanner.isSelected() && jCheckBoxScanner.isEnabled();
-				break;
-			case IBurpExtenderCallbacks.TOOL_INTRUDER:
-				selected = jCheckBoxIntruder.isSelected() && jCheckBoxIntruder.isEnabled();
-				break;
-			case IBurpExtenderCallbacks.TOOL_SEQUENCER:
-				selected = jCheckBoxSequencer.isSelected() && jCheckBoxSequencer.isEnabled();
-				break;
-			case IBurpExtenderCallbacks.TOOL_SPIDER:
-				selected = jCheckBoxSpider.isSelected() && jCheckBoxSpider.isEnabled();
-				break;
-			case IBurpExtenderCallbacks.TOOL_EXTENDER:
-				selected = jCheckBoxExtender.isSelected() && jCheckBoxExtender.isEnabled();
-				break;
-			case IBurpExtenderCallbacks.TOOL_TARGET:
-				break;
-			default:
-				break;
-		}
-		return selected;
-	}
+    /**
+     * Allows the developer to set the default value for selected tools, not
+     * every tool makes sense for every extension
+     *
+     * @param tool The tool code, as defined in IBurpExtenderCallbacks
+     * @param enabled True if the checkbox should be checked by default.
+     */
+    public void setToolDefault(int tool, boolean enabled) {
+        switch (tool) {
+            case IBurpExtenderCallbacks.TOOL_PROXY:
+                if (mCallbacks.loadExtensionSetting(SETTING_PROXY) == null) {
+                    jCheckBoxProxy.setSelected(enabled);
+                }
+                break;
+            case IBurpExtenderCallbacks.TOOL_REPEATER:
+                if (mCallbacks.loadExtensionSetting(SETTING_REPEATER) == null) {
+                    jCheckBoxRepeater.setSelected(enabled);
+                }
+                break;
+            case IBurpExtenderCallbacks.TOOL_SCANNER:
+                if (mCallbacks.loadExtensionSetting(SETTING_SCANNER) == null) {
+                    jCheckBoxScanner.setSelected(enabled);
+                }
+                break;
+            case IBurpExtenderCallbacks.TOOL_INTRUDER:
+                if (mCallbacks.loadExtensionSetting(SETTING_INTRUDER) == null) {
+                    jCheckBoxIntruder.setSelected(enabled);
+                }
+                break;
+            case IBurpExtenderCallbacks.TOOL_SEQUENCER:
+                if (mCallbacks.loadExtensionSetting(SETTING_SEQUENCER) == null) {
+                    jCheckBoxProxy.setSelected(enabled);
+                }
+                break;
+            case IBurpExtenderCallbacks.TOOL_SPIDER:
+                if (mCallbacks.loadExtensionSetting(SETTING_SPIDER) == null) {
+                    jCheckBoxSpider.setSelected(enabled);
+                }
+                break;
+            case IBurpExtenderCallbacks.TOOL_EXTENDER:
+                if (mCallbacks.loadExtensionSetting(SETTING_EXTENDER) == null) {
+                    jCheckBoxExtender.setSelected(enabled);
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
-	/**
-	 * Save all configured settings
-	 */
-	public void saveSettings() {
-		mCallbacks.saveExtensionSetting(SETTING_PROXY, setSetting(jCheckBoxProxy.isSelected()));
-		mCallbacks.saveExtensionSetting(SETTING_REPEATER, setSetting(jCheckBoxRepeater.isSelected()));
-		mCallbacks.saveExtensionSetting(SETTING_SCANNER, setSetting(jCheckBoxScanner.isSelected()));
-		mCallbacks.saveExtensionSetting(SETTING_INTRUDER, setSetting(jCheckBoxIntruder.isSelected()));
-		mCallbacks.saveExtensionSetting(SETTING_SEQUENCER, setSetting(jCheckBoxSequencer.isSelected()));
-		mCallbacks.saveExtensionSetting(SETTING_SPIDER, setSetting(jCheckBoxSpider.isSelected()));
-		mCallbacks.saveExtensionSetting(SETTING_EXTENDER, setSetting(jCheckBoxExtender.isSelected()));
-	}
+    /**
+     * Returns true if the requested tool is selected in the GUI
+     *
+     * @param tool The tool code, as defined in IBurpExtenderCallbacks
+     * @return whether the selected tool is selected
+     */
+    public boolean isToolSelected(int tool) {
+        boolean selected = false;
+        switch (tool) {
+            case IBurpExtenderCallbacks.TOOL_PROXY:
+                selected = jCheckBoxProxy.isSelected() && jCheckBoxProxy.isEnabled();
+                break;
+            case IBurpExtenderCallbacks.TOOL_REPEATER:
+                selected = jCheckBoxRepeater.isSelected() && jCheckBoxRepeater.isEnabled();
+                break;
+            case IBurpExtenderCallbacks.TOOL_SCANNER:
+                selected = jCheckBoxScanner.isSelected() && jCheckBoxScanner.isEnabled();
+                break;
+            case IBurpExtenderCallbacks.TOOL_INTRUDER:
+                selected = jCheckBoxIntruder.isSelected() && jCheckBoxIntruder.isEnabled();
+                break;
+            case IBurpExtenderCallbacks.TOOL_SEQUENCER:
+                selected = jCheckBoxSequencer.isSelected() && jCheckBoxSequencer.isEnabled();
+                break;
+            case IBurpExtenderCallbacks.TOOL_SPIDER:
+                selected = jCheckBoxSpider.isSelected() && jCheckBoxSpider.isEnabled();
+                break;
+            case IBurpExtenderCallbacks.TOOL_EXTENDER:
+                selected = jCheckBoxExtender.isSelected() && jCheckBoxExtender.isEnabled();
+                break;
+            case IBurpExtenderCallbacks.TOOL_TARGET:
+                break;
+            default:
+                break;
+        }
+        return selected;
+    }
 
-	/**
-	 * Restores any found saved settings
-	 */
-	public void restoreSavedSettings() {
-		if (mCallbacks.loadExtensionSetting(SETTING_PROXY) != null) {
-			jCheckBoxProxy.setSelected(getSetting(SETTING_PROXY));
-		}
-		if (mCallbacks.loadExtensionSetting(SETTING_REPEATER) != null) {
-			jCheckBoxRepeater.setSelected(getSetting(SETTING_REPEATER));
-		}
-		if (mCallbacks.loadExtensionSetting(SETTING_SCANNER) != null) {
-			jCheckBoxScanner.setSelected(getSetting(SETTING_SCANNER));
-		}
-		if (mCallbacks.loadExtensionSetting(SETTING_INTRUDER) != null) {
-			jCheckBoxIntruder.setSelected(getSetting(SETTING_INTRUDER));
-		}
-		if (mCallbacks.loadExtensionSetting(SETTING_SEQUENCER) != null) {
-			jCheckBoxSequencer.setSelected(getSetting(SETTING_SEQUENCER));
-		}
-		if (mCallbacks.loadExtensionSetting(SETTING_SPIDER) != null) {
-			jCheckBoxSpider.setSelected(getSetting(SETTING_SPIDER));
-		}
-		if (mCallbacks.loadExtensionSetting(SETTING_EXTENDER) != null) {
-			jCheckBoxExtender.setSelected(getSetting(SETTING_EXTENDER));
-		}
-	}
+    /**
+     * Save all configured settings
+     */
+    public void saveSettings() {
+        mCallbacks.saveExtensionSetting(SETTING_PROXY, setSetting(jCheckBoxProxy.isSelected()));
+        mCallbacks.saveExtensionSetting(SETTING_REPEATER, setSetting(jCheckBoxRepeater.isSelected()));
+        mCallbacks.saveExtensionSetting(SETTING_SCANNER, setSetting(jCheckBoxScanner.isSelected()));
+        mCallbacks.saveExtensionSetting(SETTING_INTRUDER, setSetting(jCheckBoxIntruder.isSelected()));
+        mCallbacks.saveExtensionSetting(SETTING_SEQUENCER, setSetting(jCheckBoxSequencer.isSelected()));
+        mCallbacks.saveExtensionSetting(SETTING_SPIDER, setSetting(jCheckBoxSpider.isSelected()));
+        mCallbacks.saveExtensionSetting(SETTING_EXTENDER, setSetting(jCheckBoxExtender.isSelected()));
+    }
 
-	/**
-	 * Get the boolean value of the requested setting
-	 *
-	 * @param name
-	 * @return whether the setting was selected
-	 */
-	private boolean getSetting(String name) {
-		return mCallbacks.loadExtensionSetting(name).equals("ENABLED") == true;
-	}
+    /**
+     * Restores any found saved settings
+     */
+    public void restoreSavedSettings() {
+        if (mCallbacks.loadExtensionSetting(SETTING_PROXY) != null) {
+            jCheckBoxProxy.setSelected(getSetting(SETTING_PROXY));
+        }
+        if (mCallbacks.loadExtensionSetting(SETTING_REPEATER) != null) {
+            jCheckBoxRepeater.setSelected(getSetting(SETTING_REPEATER));
+        }
+        if (mCallbacks.loadExtensionSetting(SETTING_SCANNER) != null) {
+            jCheckBoxScanner.setSelected(getSetting(SETTING_SCANNER));
+        }
+        if (mCallbacks.loadExtensionSetting(SETTING_INTRUDER) != null) {
+            jCheckBoxIntruder.setSelected(getSetting(SETTING_INTRUDER));
+        }
+        if (mCallbacks.loadExtensionSetting(SETTING_SEQUENCER) != null) {
+            jCheckBoxSequencer.setSelected(getSetting(SETTING_SEQUENCER));
+        }
+        if (mCallbacks.loadExtensionSetting(SETTING_SPIDER) != null) {
+            jCheckBoxSpider.setSelected(getSetting(SETTING_SPIDER));
+        }
+        if (mCallbacks.loadExtensionSetting(SETTING_EXTENDER) != null) {
+            jCheckBoxExtender.setSelected(getSetting(SETTING_EXTENDER));
+        }
+    }
 
-	private String setSetting(boolean value) {
-		return value ? "ENABLED" : "DISABLED";
-	}
+    /**
+     * Get the boolean value of the requested setting
+     *
+     * @param name
+     * @return whether the setting was selected
+     */
+    private boolean getSetting(String name) {
+        return mCallbacks.loadExtensionSetting(name).equals("ENABLED") == true;
+    }
 
-	/**
-	 * This method is called from within the constructor to initialize the form.
-	 * WARNING: Do NOT modify this code. The content of this method is always
-	 * regenerated by the Form Editor.
-	 */
-	@SuppressWarnings("unchecked")
+    private String setSetting(boolean value) {
+        return value ? "ENABLED" : "DISABLED";
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -348,27 +348,27 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBoxProxyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxProxyActionPerformed
-		saveSettings();
+        saveSettings();
     }//GEN-LAST:event_jCheckBoxProxyActionPerformed
 
     private void jCheckBoxRepeaterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxRepeaterActionPerformed
-		saveSettings();
+        saveSettings();
     }//GEN-LAST:event_jCheckBoxRepeaterActionPerformed
 
     private void jCheckBoxScannerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxScannerActionPerformed
-		saveSettings();
+        saveSettings();
     }//GEN-LAST:event_jCheckBoxScannerActionPerformed
 
     private void jCheckBoxIntruderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxIntruderActionPerformed
-		saveSettings();
+        saveSettings();
     }//GEN-LAST:event_jCheckBoxIntruderActionPerformed
 
     private void jCheckBoxSequencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSequencerActionPerformed
-		saveSettings();
+        saveSettings();
     }//GEN-LAST:event_jCheckBoxSequencerActionPerformed
 
     private void jCheckBoxSpiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSpiderActionPerformed
-		saveSettings();
+        saveSettings();
     }//GEN-LAST:event_jCheckBoxSpiderActionPerformed
 
     private void jCheckBoxExtenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxExtenderActionPerformed

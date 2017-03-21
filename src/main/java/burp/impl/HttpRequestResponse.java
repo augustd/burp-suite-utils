@@ -21,7 +21,7 @@ import burp.IHttpService;
 /**
  * Basic implementation of the IHttpRequestResponse interface.
  * 
- * @author augustd
+ * @author August Detlefsen [augustd at codemagi dot com]
  */
 public class HttpRequestResponse implements IHttpRequestResponse {
 
@@ -40,7 +40,7 @@ public class HttpRequestResponse implements IHttpRequestResponse {
     /**
      * Constructs an HttpRequestResponse initializing all fields from the passed Object. 
      * 
-     * @param ihrr 
+     * @param ihrr The IHttpRequestResponse used to initialize fields for this object.
      */
     public HttpRequestResponse(IHttpRequestResponse ihrr) {
         this.request = ihrr.getRequest();

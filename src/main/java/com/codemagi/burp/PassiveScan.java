@@ -141,10 +141,10 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 	}
 
 	/**
-	 * Process scanner matches in to a list of reportable issues. 
+	 * Process scanner matches into a list of reportable issues. 
 	 * 
-	 * @param matches
-	 * @param baseRequestResponse
+	 * @param matches A list of matches found by the scanner
+	 * @param baseRequestResponse The request/response object that was scanned
 	 * @return the final list of scanner issues to be reported, or null if no issues are found.
 	 */
 	protected List<IScanIssue> processIssues(List<ScannerMatch> matches, IHttpRequestResponse baseRequestResponse) {
@@ -181,9 +181,9 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 	 * if both issues have the same name, only report the existing issue
 	 * otherwise report both issues
 	 *
-	 * @param existingIssue
-	 * @param newIssue
-	 * @return
+	 * @param existingIssue Existing reported issue to compare
+	 * @param newIssue New issue to compare
+	 * @return Zero if the issues are different, or -1 if they are the same
 	 */
 	@Override
 	public int consolidateDuplicateIssues(IScanIssue existingIssue, IScanIssue newIssue) {

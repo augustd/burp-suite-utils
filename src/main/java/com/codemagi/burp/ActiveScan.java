@@ -149,13 +149,13 @@ public abstract class ActiveScan extends BaseExtender implements IScannerCheck {
 	 * method determines how/whether Burp consolidates the multiple issues to
 	 * prevent duplication.
 	 *
-	 * Since the issue name is sufficient to identify our issues as different,
+	 * Since the issue detail is sufficient to identify our issues as different,
 	 * if both issues have the same name, only report the existing issue
 	 * otherwise report both issues
 	 *
-	 * @param existingIssue
-	 * @param newIssue
-	 * @return
+	 * @param existingIssue Existing reported issue to compare
+	 * @param newIssue New issue to compare
+	 * @return Zero if the issues are different, or -1 if they are the same
 	 */
 	@Override
 	public int consolidateDuplicateIssues(IScanIssue existingIssue, IScanIssue newIssue) {
