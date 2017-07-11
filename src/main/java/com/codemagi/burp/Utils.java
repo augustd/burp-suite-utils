@@ -9,8 +9,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,11 +23,32 @@ import java.util.regex.Pattern;
 public class Utils {
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
+    public static final Map<Integer,String> TOOLS = new HashMap<>();
+    static {
+        TOOLS.put(1, "Suite");
+        TOOLS.put(2, "Target");
+        TOOLS.put(4, "Proxy");
+        TOOLS.put(8, "Spider");
+        TOOLS.put(16, "Scanner");
+        TOOLS.put(32, "Intruder");
+        TOOLS.put(64, "Repeater");
+        TOOLS.put(128, "Sequencer");
+        TOOLS.put(256, "Decoder");
+        TOOLS.put(512, "Comparer");
+        TOOLS.put(1024, "Extender");
+    }
 
     /**
      * Block constructor by design
      */
     private Utils() {
+    }
+    
+    /**
+     * Returns the human-readable tool name for the passed tool flag
+     */
+    public static String getToolName(int toolFlag) {
+        return noNulls(TOOLS.get(toolFlag));
     }
     
     /**
