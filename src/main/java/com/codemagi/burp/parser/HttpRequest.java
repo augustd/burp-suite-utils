@@ -378,6 +378,12 @@ public class HttpRequest {
 
             //split the headers into name-value pairs
             String[] split = currLine.split(": ");
+            
+            if (split.length < 2) {
+                split = new String[] {
+                    split[0], ""
+                };
+            }
 
             String headerName = Utils.trim(split[0]);
             String headerValue = Utils.trim(split[1]);
