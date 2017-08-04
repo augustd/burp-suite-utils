@@ -16,6 +16,10 @@
 package com.codemagi.burp.parser;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -30,48 +34,49 @@ import static org.junit.Assert.*;
  * @author august
  */
 public class HttpResponseTest {
-    
-    HttpResponse responseToTest; 
-    
+
+    HttpResponse responseToTest;
+
     public HttpResponseTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
         try {
-            responseToTest = HttpResponse.parseMessage("HTTP/1.1 201 Created\n" +
-				"Date: Thu, 23 Feb 2017 23:16:17 GMT\n" +
-				"Content-Type: application/json\n" +
-				"Content-Length: 21\n" +
-				"Connection: close\n" +
-				"Vary: Origin\n" +
-				"Cache-Control: max-age=0\n" +
-				"Pragma: no-cache\n" +
-				"Expires: Thu, 23 Feb 2017 23:16:17 GMT\n" +
-				"X-Content-Type-Options: no-sniff\n" +
-				"Strict-Transport-Security: max-age=31536000; includeSubDomains;\n" +
-				"Cache-Control: no-cache, no-store, must-revalidate\n" +
-				"Pragma: no-cache\n" +
-				"X-Response-Time: 4.134\n" +
-				"\n" +
-				"{\n" +
-				"  \"status\" : \"OK\"\n" +
-				"}");
+            responseToTest = HttpResponse.parseMessage("HTTP/1.1 201 Created\n"
+                    + "Date: Thu, 23 Feb 2017 23:16:17 GMT\n"
+                    + "Content-Type: application/json\n"
+                    + "Content-Length: 21\n"
+                    + "Connection: close\n"
+                    + "Vary: Origin\n"
+                    + "Cache-Control: max-age=0\n"
+                    + "Pragma: no-cache\n"
+                    + "Expires: Thu, 23 Feb 2017 23:16:17 GMT\n"
+                    + "X-Content-Type-Options: no-sniff\n"
+                    + "Strict-Transport-Security: max-age=31536000; includeSubDomains;\n"
+                    + "Cache-Control: no-cache, no-store, must-revalidate\n"
+                    + "Pragma: no-cache\n"
+                    + "Dummy: \n"
+                    + "X-Response-Time: 4.134\n"
+                    + "\n"
+                    + "{\n"
+                    + "  \"status\" : \"OK\"\n"
+                    + "}");
         } catch (IOException ex) {
             Logger.getLogger(HttpResponseTest.class.getName()).log(Level.SEVERE, null, ex);
         }
-		
-		System.out.println("-------------------");
-		System.out.println(responseToTest.getBody());
-		System.out.println("-------------------");
+
+        System.out.println("-------------------");
+        System.out.println(responseToTest.getBody());
+        System.out.println("-------------------");
     }
 
     @After
@@ -79,7 +84,7 @@ public class HttpResponseTest {
     }
 
     /**
-     * Test of getMethod method, of class HttpRequest.
+     * Test of getMethod method, of class HttpResponse.
      */
     @Test
     public void testGetResponseCode() {
@@ -89,7 +94,7 @@ public class HttpResponseTest {
     }
 
     /**
-     * Test of getPath method, of class HttpRequest.
+     * Test of getPath method, of class HttpResponse.
      */
     @Test
     public void testGetResponseReason() {
@@ -99,7 +104,7 @@ public class HttpResponseTest {
     }
 
     /**
-     * Test of getVersion method, of class HttpRequest.
+     * Test of getVersion method, of class HttpResponse.
      */
     @Test
     public void testGetVersion() {
@@ -109,13 +114,43 @@ public class HttpResponseTest {
     }
 
     /**
-     * Test of getBody method, of class HttpRequest.
+     * Test of getBody method, of class HttpResponse.
      */
     @Test
     public void testGetBody() {
         System.out.println("getBody");
         String result = responseToTest.getBody();
         assertEquals("{\n  \"status\" : \"OK\"\n}", result);
+    }
+
+    /**
+     * Test of getHeadersSorted method, of class HttpResponse.
+     */
+    @Test
+    public void testGetHeadersSorted() {
+        System.out.println("getHeadersSorted");
+        LinkedHashMap headersSorted = responseToTest.getHeadersSorted();
+        Iterator it = headersSorted.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            System.out.println(pair.getKey() + " = " + pair.getValue());
+        }
+        assertEquals(12, headersSorted.size()); //see known issue in HttpResponse
+        
+        assertEquals("Thu, 23 Feb 2017 23:16:17 GMT", headersSorted.values().toArray()[4]);
+    }
+
+    /**
+     * Test of getHeadersSorted method, of class HttpResponse.
+     */
+    @Test
+    public void testGetHeader() {
+        System.out.println("getHeader");
+        String pragma = responseToTest.getHeader("Pragma");
+        assertEquals("no-cache", pragma);
+
+        String dummy = responseToTest.getHeader("Dummy");
+        assertEquals("", dummy);
     }
 
 }
