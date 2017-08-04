@@ -26,6 +26,10 @@ import java.util.regex.*;
  *
  * The body of the HTTP response is stored as-is in the 'body' member.
  *
+ * KNOWN ISSUE: Some HTTP responses contain duplicate header names. This class
+ * will replace duplicate headers in the order they are found. E.g. the value of
+ * the second header with the same name will replace the first.
+ *
  * @author August Detlefsen [augustd at codemagi dot com]
  */
 public class HttpResponse {
@@ -120,6 +124,16 @@ public class HttpResponse {
         }
 
         return sortedHeaders;
+    }
+
+    /**
+     * Returns the map of HTTP headers contained in this message, in their
+     * original order.
+     *
+     * @return A LinkedHashMap containing the HTTP headers
+     */
+    public LinkedHashMap getHeaders() {
+        return headers;
     }
 
     /**
@@ -226,11 +240,11 @@ public class HttpResponse {
             String[] split = currLine.split(": ");
 
             if (split.length < 2) {
-                split = new String[] {
+                split = new String[]{
                     split[0], ""
                 };
             }
-            
+
             String headerName = Utils.trim(split[0]);
             String headerValue = Utils.trim(split[1]);
 
