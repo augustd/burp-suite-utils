@@ -1,11 +1,8 @@
 package com.codemagi.burp.parser;
 
-import burp.impl.Cookie;
 import com.codemagi.burp.Utils;
 import java.io.*;
-import java.net.URL;
 import java.util.*;
-import java.util.regex.*;
 
 /**
  * Generic http response parser. Messages are of the general form:
@@ -151,6 +148,15 @@ public class HttpResponse {
     public String getHeader(String name) {
         return headers.get(name);
     }
+    
+    /**
+     * Removes a header based on its name
+     * @param name The name of the header to remove
+     */
+    public void removeHeader(String name) {
+        sortedHeaders = null;
+        headers.remove(name);
+    }
 
     /**
      * Sets the Content-Length header to the current size of the response body
@@ -255,16 +261,10 @@ public class HttpResponse {
 
         //parse the  body, if there is one
         StringBuilder bodyBuilder = new StringBuilder();
-        currLine = bin.readLine();
-        if (currLine != null) {
-            while (currLine != null) {
-                System.out.println(currLine);
-                bodyBuilder.append(Utils.noNulls(currLine));
-                currLine = bin.readLine();
-                if (currLine != null) {
-                    bodyBuilder.append("\n");
-                }
-            }
+        int c;
+        while ((c = bin.read()) != -1) {
+            //Since c is an integer, cast it to a char. If it isn't -1, it will be in the correct range of char.
+            bodyBuilder.append( (char)c ) ;  
         }
         this.body = bodyBuilder.toString();
     }
@@ -274,7 +274,7 @@ public class HttpResponse {
             return;
         }
 
-        String[] parts = command.split(" ");
+        String[] parts = command.split(" ", 3);
         version = (parts.length > 0) ? parts[0] : "";
         responseCode = (parts.length > 1) ? Integer.parseInt(parts[1]) : 0;
         responseReason = (parts.length > 2) ? parts[2] : "";
