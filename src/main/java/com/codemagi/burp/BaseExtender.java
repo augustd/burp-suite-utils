@@ -19,8 +19,8 @@ public abstract class BaseExtender implements IBurpExtender {
 	 * to settings which will be saved in the Burp state.
 	 */
 	protected String settingsNamespace = "BE_";
-	protected IBurpExtenderCallbacks callbacks;
-	protected IExtensionHelpers helpers;
+	protected static IBurpExtenderCallbacks callbacks;
+	protected static IExtensionHelpers helpers;
 	protected OutputStream stdout;
 	protected OutputStream stderr;
 	
@@ -63,6 +63,14 @@ public abstract class BaseExtender implements IBurpExtender {
 
 	public static IBurpExtender getInstance() {
         return instance;
+    }
+        
+    public static IBurpExtenderCallbacks getCallbacks() {
+        return callbacks;
+    }
+    
+    public static IExtensionHelpers getHelpers() {
+        return helpers;
     }
 
 	/**
