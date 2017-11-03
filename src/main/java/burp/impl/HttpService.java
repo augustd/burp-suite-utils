@@ -16,6 +16,7 @@
 package burp.impl;
 
 import burp.IHttpService;
+import java.net.URL;
 
 /**
  *
@@ -34,6 +35,12 @@ public class HttpService implements IHttpService {
         this.host = host;
         this.port = port;
         this.protocol = protocol;
+    }
+    
+    public HttpService(URL url) {
+        this.host = url.getHost();
+        this.protocol = url.getProtocol();
+        this.port = (url.getPort() > 0) ? url.getPort() : url.getDefaultPort();
     }
 
     public HttpService(IHttpService service) {
