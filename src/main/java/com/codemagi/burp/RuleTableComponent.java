@@ -1,12 +1,20 @@
 package com.codemagi.burp;
 
 import burp.IBurpExtenderCallbacks;
+import burp.IHttpRequestResponse;
+import burp.IHttpService;
+import burp.impl.HttpService;
+import com.codemagi.burp.parser.HttpRequest;
+import com.codemagi.burp.parser.HttpResponse;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.regex.Pattern;
 import javax.swing.DefaultCellEditor;
@@ -90,15 +98,25 @@ public class RuleTableComponent extends javax.swing.JPanel {
     /**
      * Load match rules from a file
      */
-    private boolean loadMatchRules(String url) {
+    private boolean loadMatchRules(String rulesUrl) {
 	//load match rules from file
 	try {
 	    
 	    DefaultTableModel model = (DefaultTableModel)rules.getModel();
 
-	    //read match rules from the stream
-	    InputStream is = new URL(url).openStream();
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            //request match rules from URL 
+	    URL url = new URL(rulesUrl);
+            IHttpService service = new HttpService(url);
+            HttpRequest request = new HttpRequest(url);
+            IHttpRequestResponse ihrr = mCallbacks.makeHttpRequest(service, request.getBytes());
+            
+            //parse the response
+            byte[] responseBytes = ihrr.getResponse();
+            HttpResponse response = HttpResponse.parseMessage(responseBytes);
+            
+	    //read match rules from the response
+            Reader is = new StringReader(response.getBody());
+	    BufferedReader reader = new BufferedReader(is);
 	    
 	    String str;
 	    while ((str = reader.readLine()) != null) {
