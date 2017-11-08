@@ -76,4 +76,8 @@ public class HttpService implements IHttpService {
         this.protocol = protocol;
     }
     
+    public boolean useHttps() {
+        return PROTOCOL_HTTPS.equalsIgnoreCase(protocol);
+    }
+    
 }
