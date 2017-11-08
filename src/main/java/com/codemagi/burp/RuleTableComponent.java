@@ -29,6 +29,7 @@ public class RuleTableComponent extends javax.swing.JPanel {
     PassiveScan scan;
 
     private String DEFAULT_URL = "https://raw.githubusercontent.com/augustd/burp-suite-software-version-checks/master/src/burp/match-rules.tab";
+    private String backupUrl; 
     public static final String SETTING_URL = "SETTING_URL";
     
     /**
@@ -39,10 +40,15 @@ public class RuleTableComponent extends javax.swing.JPanel {
      * @param defaultUrl The default URL to load match rules from
      */
     public RuleTableComponent(PassiveScan passiveScan, IBurpExtenderCallbacks callbacks, String defaultUrl) {
+        this(passiveScan, callbacks, defaultUrl, null);
+    }
+        
+    public RuleTableComponent(PassiveScan passiveScan, IBurpExtenderCallbacks callbacks, String defaultUrl, String backupUrl) {
 
 	mCallbacks = callbacks;
 	this.scan = passiveScan;
         this.DEFAULT_URL = defaultUrl;
+        this.backupUrl = backupUrl;
 
 	initComponents();
 
@@ -52,7 +58,13 @@ public class RuleTableComponent extends javax.swing.JPanel {
         restoreSettings();
         
 	//load match rules from GitHub
-        loadMatchRules(urlTextField.getText()); 
+        boolean loadSuccess = loadMatchRules(urlTextField.getText()); 
+        
+        //as a backup, load match rules from within the jar
+        if (!loadSuccess && backupUrl != null) {
+            mCallbacks.printOutput("WARNING: Failed to load remote match rules");
+            loadMatchRulesFromJar(backupUrl);
+        }
 
         //add a listener for changes to the table model
         final DefaultTableModel model = (DefaultTableModel)rules.getModel();
@@ -96,15 +108,13 @@ public class RuleTableComponent extends javax.swing.JPanel {
     }
 
     /**
-     * Load match rules from a file
+     * Load match rules from a URL
      */
     private boolean loadMatchRules(String rulesUrl) {
 	//load match rules from file
 	try {
-	    
-	    DefaultTableModel model = (DefaultTableModel)rules.getModel();
-
-            //request match rules from URL 
+            //request match rules from remote URL 
+    	    mCallbacks.printOutput("Loading match rules from: " + rulesUrl);
 	    URL url = new URL(rulesUrl);
             IHttpService service = new HttpService(url);
             HttpRequest request = new HttpRequest(url);
@@ -112,44 +122,74 @@ public class RuleTableComponent extends javax.swing.JPanel {
             
             //parse the response
             byte[] responseBytes = ihrr.getResponse();
+            if (responseBytes == null) return false; //no response received from server 
             HttpResponse response = HttpResponse.parseMessage(responseBytes);
             
 	    //read match rules from the response
             Reader is = new StringReader(response.getBody());
 	    BufferedReader reader = new BufferedReader(is);
 	    
-	    String str;
-	    while ((str = reader.readLine()) != null) {
-		mCallbacks.printOutput("str: " + str);
-		if (str.trim().length() == 0) {
-		    continue;
-		}
+            processMatchRules(reader);
+                        
+            return true;
 
-		String[] values = str.split("\\t");
-		model.addRow(values);
+	} catch (IOException e) {
+	    scan.printStackTrace(e);
+	} catch (NumberFormatException e) {
+	    scan.printStackTrace(e);
+	} catch (Exception e) {
+	    scan.printStackTrace(e);
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Load match rules from within the jar
+     */
+    private boolean loadMatchRulesFromJar(String rulesUrl) {
+	//load match rules from a local file
+	try {
+	    mCallbacks.printOutput("Loading match rules from local jar: " + rulesUrl);
+            InputStream in = getClass().getClassLoader().getResourceAsStream(rulesUrl); 
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-		Pattern pattern = Pattern.compile(values[0]);
-                
-		scan.addMatchRule(new MatchRule(
-			pattern, 
-			new Integer(values[1]), 
-			values[2], 
-			ScanIssueSeverity.fromName(values[3]),
-			ScanIssueConfidence.fromName(values[4]))
-		);
-	    }
+            processMatchRules(reader);
             
             return true;
 
 	} catch (IOException e) {
-	    OutputStream error = mCallbacks.getStderr();
-	    e.printStackTrace(new PrintStream(error));
+	    scan.printStackTrace(e);
 	} catch (NumberFormatException e) {
-	    OutputStream error = mCallbacks.getStderr();
-	    e.printStackTrace(new PrintStream(error));
+	    scan.printStackTrace(e);
 	}
         
         return false;
+    }
+    
+    private void processMatchRules(BufferedReader reader) throws IOException {
+        DefaultTableModel model = (DefaultTableModel)rules.getModel();
+
+        String str;
+        while ((str = reader.readLine()) != null) {
+            mCallbacks.printOutput("str: " + str);
+            if (str.trim().length() == 0) {
+                continue;
+            }
+
+            String[] values = str.split("\\t");
+            model.addRow(values);
+
+            Pattern pattern = Pattern.compile(values[0]);
+
+            scan.addMatchRule(new MatchRule(
+                    pattern,
+                    new Integer(values[1]),
+                    values[2],
+                    ScanIssueSeverity.fromName(values[3]),
+                    ScanIssueConfidence.fromName(values[4]))
+            );
+        }
     }
     
     /**
@@ -173,7 +213,7 @@ public class RuleTableComponent extends javax.swing.JPanel {
         mCallbacks.printOutput("Restoring settings...");
         
         String settingUrl = mCallbacks.loadExtensionSetting(scan.getSettingsNamespace() + SETTING_URL);
-        mCallbacks.printOutput("Loaded URL: " + settingUrl);
+        mCallbacks.printOutput("Match rules URL from settings: " + settingUrl);
         if (settingUrl != null) {
             urlTextField.setText(settingUrl);
             //extender.setFormUrl(settingUrl);
