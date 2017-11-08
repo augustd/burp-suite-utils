@@ -113,15 +113,22 @@ public class RuleTableComponent extends javax.swing.JPanel {
     private boolean loadMatchRules(String rulesUrl) {
 	//load match rules from file
 	try {
+            //check for file URL 
+            if (rulesUrl != null && rulesUrl.toLowerCase().startsWith("file:")) {
+                return loadMatchRulesFromFile(rulesUrl);
+            }
+            
             //request match rules from remote URL 
     	    mCallbacks.printOutput("Loading match rules from: " + rulesUrl);
 	    URL url = new URL(rulesUrl);
             IHttpService service = new HttpService(url);
             HttpRequest request = new HttpRequest(url);
-            IHttpRequestResponse ihrr = mCallbacks.makeHttpRequest(service, request.getBytes());
+            HttpRequestThread requestThread = new HttpRequestThread(service, request.getBytes(), mCallbacks);
+            requestThread.start();
+            requestThread.join();
             
             //parse the response
-            byte[] responseBytes = ihrr.getResponse();
+            byte[] responseBytes = requestThread.getResponse();
             if (responseBytes == null) return false; //no response received from server 
             HttpResponse response = HttpResponse.parseMessage(responseBytes);
             
@@ -153,6 +160,29 @@ public class RuleTableComponent extends javax.swing.JPanel {
 	    mCallbacks.printOutput("Loading match rules from local jar: " + rulesUrl);
             InputStream in = getClass().getClassLoader().getResourceAsStream(rulesUrl); 
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            processMatchRules(reader);
+            
+            return true;
+
+	} catch (IOException e) {
+	    scan.printStackTrace(e);
+	} catch (NumberFormatException e) {
+	    scan.printStackTrace(e);
+	}
+        
+        return false;
+    }
+
+    /**
+     * Load match rules from a file URL 
+     */
+    private boolean loadMatchRulesFromFile(String rulesUrl) {
+	//load match rules from a local file
+	try {
+	    mCallbacks.printOutput("Loading match rules from file: " + rulesUrl);
+            InputStream in = new URL(rulesUrl).openStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
             processMatchRules(reader);
             

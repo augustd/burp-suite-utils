@@ -16,6 +16,8 @@
 package com.codemagi.burp;
 
 import burp.IBurpExtenderCallbacks;
+import burp.IHttpService;
+import burp.impl.HttpService;
 
 /**
  *
@@ -34,6 +36,14 @@ public class HttpRequestThread extends Thread {
         this.host = host;
         this.port = port;
         this.useHttps = useHttps;
+        this.request = request;
+        this.callbacks = callbacks;
+    }
+    
+    public HttpRequestThread(IHttpService service, byte[] request, IBurpExtenderCallbacks callbacks) {
+        this.host = service.getHost();
+        this.port = service.getPort();
+        this.useHttps = HttpService.PROTOCOL_HTTPS.equalsIgnoreCase(service.getProtocol());
         this.request = request;
         this.callbacks = callbacks;
     }
