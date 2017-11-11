@@ -1,22 +1,19 @@
 package com.codemagi.burp;
 
 import burp.IBurpExtenderCallbacks;
-import burp.IHttpRequestResponse;
 import burp.IHttpService;
 import burp.impl.HttpService;
 import com.codemagi.burp.parser.HttpRequest;
 import com.codemagi.burp.parser.HttpResponse;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import javax.swing.DefaultCellEditor;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -57,14 +54,9 @@ public class RuleTableComponent extends javax.swing.JPanel {
         //restore saved settings 
         restoreSettings();
         
-	//load match rules from GitHub
-        boolean loadSuccess = loadMatchRules(urlTextField.getText()); 
-        
-        //as a backup, load match rules from within the jar
-        if (!loadSuccess && backupUrl != null) {
-            mCallbacks.printOutput("WARNING: Failed to load remote match rules");
-            loadMatchRulesFromJar(backupUrl);
-        }
+	//load match rules from configured URL
+        MatchRulesLoader loader = new MatchRulesLoader(urlTextField.getText());
+        loader.start();
 
         //add a listener for changes to the table model
         final DefaultTableModel model = (DefaultTableModel)rules.getModel();
@@ -123,12 +115,13 @@ public class RuleTableComponent extends javax.swing.JPanel {
 	    URL url = new URL(rulesUrl);
             IHttpService service = new HttpService(url);
             HttpRequest request = new HttpRequest(url);
-            HttpRequestThread requestThread = new HttpRequestThread(service, request.getBytes(), mCallbacks);
-            requestThread.start();
-            requestThread.join();
+            byte[] responseBytes = mCallbacks.makeHttpRequest(
+                    service.getHost(), 
+                    service.getPort(), 
+                    HttpService.PROTOCOL_HTTPS.equalsIgnoreCase(service.getProtocol()), 
+                    request.getBytes());
             
             //parse the response
-            byte[] responseBytes = requestThread.getResponse();
             if (responseBytes == null) return false; //no response received from server 
             HttpResponse response = HttpResponse.parseMessage(responseBytes);
             
@@ -142,8 +135,6 @@ public class RuleTableComponent extends javax.swing.JPanel {
 
 	} catch (IOException e) {
 	    scan.printStackTrace(e);
-	} catch (NumberFormatException e) {
-	    scan.printStackTrace(e);
 	} catch (Exception e) {
 	    scan.printStackTrace(e);
         }
@@ -151,6 +142,28 @@ public class RuleTableComponent extends javax.swing.JPanel {
         return false;
     }
     
+    protected class MatchRulesLoader extends Thread {
+        
+        private String rulesUrl; 
+        
+        public MatchRulesLoader(String rulesUrl) {
+            this.rulesUrl = rulesUrl;
+        }
+        
+        @Override
+        public void run() {
+            boolean success = loadMatchRules(rulesUrl);
+
+            if (success) {
+                saveSettings();
+            } else if (!success && backupUrl != null) {
+                mCallbacks.printOutput("WARNING: Failed to load remote match rules");
+                success = loadMatchRulesFromJar(backupUrl);
+            }
+        }
+        
+    }
+
     /**
      * Load match rules from within the jar
      */
@@ -210,15 +223,24 @@ public class RuleTableComponent extends javax.swing.JPanel {
             String[] values = str.split("\\t");
             model.addRow(values);
 
-            Pattern pattern = Pattern.compile(values[0]);
+            try {
+                Pattern pattern = Pattern.compile(values[0]);
 
-            scan.addMatchRule(new MatchRule(
-                    pattern,
-                    new Integer(values[1]),
-                    values[2],
-                    ScanIssueSeverity.fromName(values[3]),
-                    ScanIssueConfidence.fromName(values[4]))
-            );
+                scan.addMatchRule(new MatchRule(
+                        pattern,
+                        new Integer(values[1]),
+                        values[2],
+                        ScanIssueSeverity.fromName(values[3]),
+                        ScanIssueConfidence.fromName(values[4]))
+                );
+            } catch (PatternSyntaxException pse) {
+                //in case the match pattern is invalid
+                mCallbacks.printError("Invalid match pattern: " + values[0]);
+                
+            } catch (NumberFormatException e) {
+                //in case the match group is invalid
+                mCallbacks.printError("Invalid match group: " + values[1]);
+            }
         }
     }
     
@@ -387,12 +409,9 @@ public class RuleTableComponent extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadBtnActionPerformed
-	//read value from text field
-	String url = urlTextField.getText();
-	
-	//issue request to URL
-	boolean success = loadMatchRules(url);
-        if (success) saveSettings();
+	//issue request to URL in GUI
+        MatchRulesLoader loader = new MatchRulesLoader(urlTextField.getText());
+        loader.start();
     }//GEN-LAST:event_loadBtnActionPerformed
 
     private void urlTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_urlTextFieldActionPerformed
@@ -423,9 +442,10 @@ public class RuleTableComponent extends javax.swing.JPanel {
 
         //load the defaults
         urlTextField.setText(DEFAULT_URL);
-        loadMatchRules(DEFAULT_URL);
         
-        saveSettings();
+        //issue request to URL
+        MatchRulesLoader loader = new MatchRulesLoader(DEFAULT_URL);
+        loader.start();
     }//GEN-LAST:event_resetButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
