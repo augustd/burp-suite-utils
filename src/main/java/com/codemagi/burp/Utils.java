@@ -6,6 +6,9 @@ import burp.IResponseInfo;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -241,6 +244,36 @@ public class Utils {
 
 	}
 
+    }
+
+    /**
+     * URL decodes an input String using the UTF-8 character set
+     * (IExtensionHelpers class uses LATIN-1)
+     *
+     * @param input The String to decode
+     * @return The URL-decoded String
+     */
+    public static String urlDecode(String input) {
+        try {
+            return URLDecoder.decode(input, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            throw new AssertionError("UTF-8 not supported", ex);
+        }
+    }
+
+    /**
+     * URL encodes an input String using the UTF-8 character set
+     * (IExtensionHelpers class uses LATIN-1)
+     *
+     * @param input The String to encode
+     * @return The URL-encoded String
+     */
+    public static String urlEncode(String input) {
+        try {
+            return URLEncoder.encode(input, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            throw new AssertionError("UTF-8 not supported", ex);
+        }
     }
 
 }
