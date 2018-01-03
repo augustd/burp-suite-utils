@@ -10,6 +10,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -274,6 +276,21 @@ public class Utils {
         } catch (UnsupportedEncodingException ex) {
             throw new AssertionError("UTF-8 not supported", ex);
         }
+    }
+
+    public static byte[] hash(String input, String algorithm) {
+        return hash(input.getBytes(UTF8), algorithm);
+    }
+    
+    public static byte[] hash(byte[] input, String algorithm) {
+        byte[] output = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance(algorithm);
+            output = md.digest(input);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return output;
     }
 
 }
