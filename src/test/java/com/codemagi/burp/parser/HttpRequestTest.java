@@ -15,10 +15,8 @@
  */
 package com.codemagi.burp.parser;
 
-import burp.impl.Cookie;
+import burp.ICookie;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -185,7 +183,7 @@ public class HttpRequestTest {
     @Test
     public void testGetCookies() {
         System.out.println("getCookies");
-        List<Cookie> result = requestToTest.getCookies();
+        List<ICookie> result = requestToTest.getCookies();
         assertEquals(43, result.size());
     }
 
