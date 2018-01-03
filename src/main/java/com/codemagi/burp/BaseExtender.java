@@ -22,7 +22,7 @@ public abstract class BaseExtender implements IBurpExtender {
 	protected static IBurpExtenderCallbacks callbacks;
 	protected static IExtensionHelpers helpers;
 	protected OutputStream stdout;
-	protected OutputStream stderr;
+	protected static OutputStream stderr;
 	
 	private static IBurpExtender instance;
 
@@ -78,7 +78,7 @@ public abstract class BaseExtender implements IBurpExtender {
 	 *
 	 * @param e Exception to print stack trace for.
 	 */
-	public void printStackTrace(Exception e) {
+	public static void printStackTrace(Exception e) {
 		e.printStackTrace(new PrintStream(stderr));
 	}
 
