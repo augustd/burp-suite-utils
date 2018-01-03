@@ -1,5 +1,6 @@
 package com.codemagi.burp.parser;
 
+import burp.ICookie;
 import burp.impl.Cookie;
 import com.codemagi.burp.Utils;
 import java.io.*;
@@ -207,9 +208,9 @@ public class HttpRequest {
      * @return A list containing Cookie objects parsed from the internal string
      * representation
      */
-    public List<Cookie> getCookies() {
+    public List<ICookie> getCookies() {
         String cookies = getHeader("Cookie");
-        List<Cookie> output = new ArrayList<>();
+        List<ICookie> output = new ArrayList<>();
 
         if (Utils.isEmpty(cookies)) {
             return output;
@@ -222,23 +223,23 @@ public class HttpRequest {
         return output;
     }
 
-    public void setCookies(List<Cookie> cookies) {
+    public void setCookies(List<ICookie> cookies) {
         StringBuilder buffer = new StringBuilder(cookies.size() * 40);
-        for (Cookie cookie : cookies) {
+        for (ICookie cookie : cookies) {
             buffer.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
         }
         setHeader("Cookie", buffer.toString());
     }
 
-    public void addCookie(Cookie newCookie) {
+    public void addCookie(ICookie newCookie) {
         if (newCookie == null || Utils.isEmpty(newCookie.getName())) {
             return;
         }
 
         //check if this cookie exists already
         boolean found = false;
-        List<Cookie> cookies = getCookies();
-        for (Cookie oldCookie : cookies) {
+        List<ICookie> cookies = getCookies();
+        for (ICookie oldCookie : cookies) {
             if (newCookie.getName().equals(oldCookie.getName())) {
                 //update old cookie with new value
                 Collections.replaceAll(cookies, oldCookie, newCookie);
