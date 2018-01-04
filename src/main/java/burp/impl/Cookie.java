@@ -1,6 +1,11 @@
 package burp.impl;
 
 import burp.ICookie;
+import com.codemagi.burp.BaseExtender;
+import com.codemagi.burp.Utils;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -14,6 +19,9 @@ public class Cookie implements ICookie {
     String domain;
     String path;
     Date expiration;
+    Long maxAge;
+    Boolean secure = false;
+    Boolean httpOnly = false;
 
     public Cookie(String name, String value) {
         this.name = name;
@@ -28,6 +36,78 @@ public class Cookie implements ICookie {
         this.expiration = cookie.getExpiration();
     }
 
+    /**
+     * Parses a cookie from a String containing the raw HTTP response header 
+     * _value_ (Minus "Set-Cookie:"). 
+     * The first line of input is
+     * save in the protected <tt>command</tt> variable. The subsequent lines are
+     * put into a linked hash as field/value pairs. Input is parsed until a
+     * blank line is reached, after which any data should appear.
+     *
+     * @param rawCookie A String containing the raw cookie 
+     * @throws ParseException if the cookie does not have at least a name
+     */
+    public static Cookie parseCookie(String rawCookie) throws ParseException {
+        String[] rawCookieParams = rawCookie.split(";");
+
+        //get the cookie name, check for valid cookie
+        String[] rawCookieNameAndValue = rawCookieParams[0].split("=");
+        String cookieName = rawCookieNameAndValue[0].trim();
+        if (Utils.isEmpty(cookieName)) {
+            throw new ParseException("Invalid cookie: missing name", 0);
+        }
+
+        //get the cookie value
+        String cookieValue = rawCookieNameAndValue[1].trim();
+        
+        //construct output
+        Cookie output = new Cookie(cookieName, cookieValue);
+        
+        //parse other cookie params
+        for (int i = 1; i < rawCookieParams.length; i++) {
+            String[] rawCookieParam = rawCookieParams[i].trim().split("=");
+
+            String paramName = rawCookieParam[0].trim();
+
+            if ("secure".equalsIgnoreCase(paramName)) {
+                output.setSecure(true);
+                
+            } else if ("HttpOnly".equalsIgnoreCase(paramName)) {
+                output.setHttpOnly(true);
+                
+            } else {
+                if (rawCookieParam.length != 2) {
+                    //attribute not a flag or missing value
+                    continue;
+                }
+                String paramValue = rawCookieParam[1].trim();
+
+                if ("expires".equalsIgnoreCase(paramName)) {
+                    try {
+                        SimpleDateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss zzz");
+                        Date expiryDate = format.parse(paramValue);
+                        output.setExpiration(expiryDate);
+                    } catch (Exception e) {
+                        //couldn't parse date, ignore
+                        BaseExtender.getCallbacks().printError("WARNING: unable to parse cookie expiration: " + paramValue);
+                    }
+                } else if ("max-age".equalsIgnoreCase(paramName)) {
+                    long maxAge = Long.parseLong(paramValue);
+                    output.setMaxAge(maxAge);
+
+                } else if ("domain".equalsIgnoreCase(paramName)) {
+                    output.setDomain(paramValue);
+                    
+                } else if ("path".equalsIgnoreCase(paramName)) {
+                    output.setPath(paramValue);
+                    
+                }
+            }
+        }
+
+        return output;
+    }
+    
     @Override
     public String getName() {
         return name;
@@ -73,4 +153,27 @@ public class Cookie implements ICookie {
         this.expiration = expiration;
     }
 
+    public Long getMaxAge() {
+        return maxAge;
+    }
+
+    public void setMaxAge(Long maxAge) {
+        this.maxAge = maxAge;
+    }
+
+    public Boolean getSecure() {
+        return secure;
+    }
+
+    public void setSecure(Boolean secure) {
+        this.secure = secure;
+    }
+
+    public Boolean getHttpOnly() {
+        return httpOnly;
+    }
+
+    public void setHttpOnly(Boolean httpOnly) {
+        this.httpOnly = httpOnly;
+    }
 }
