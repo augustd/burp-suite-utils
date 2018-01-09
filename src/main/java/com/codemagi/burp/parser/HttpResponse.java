@@ -1,8 +1,14 @@
 package com.codemagi.burp.parser;
 
+import burp.ICookie;
+import burp.impl.Cookie;
+import com.codemagi.burp.BaseExtender;
 import com.codemagi.burp.Utils;
 import java.io.*;
+import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Generic http response parser. Messages are of the general form:
@@ -38,6 +44,7 @@ public class HttpResponse {
     protected String body;
     protected LinkedHashMap<String, String> headers = new LinkedHashMap<>();
     protected LinkedHashMap<String, String> sortedHeaders = null;
+    protected List<ICookie> cookies = new ArrayList<>();
 
     /**
      * Private no-argument constructor is only used internally by static factory
@@ -158,6 +165,36 @@ public class HttpResponse {
         headers.remove(name);
     }
 
+    public List<ICookie> getCookies() {
+        return cookies;
+    }
+
+    public void setCookies(List<ICookie> cookies) {
+        this.cookies = cookies;
+    }
+    
+    public void addCookie(ICookie newCookie) {
+        cookies.add(newCookie);
+    }
+    
+    /**
+     * Returns the _first_ cookie matching <tt>cookieName</tt>. Objects returned
+     * by this method are of the class burp.impl.Cookie which implements the
+     * burp.ICookie interface.
+     *
+     * @param cookieName The name of the cookie to return
+     * @return The cookie, or null if there is no cookie by that name in the response.
+     */
+    public ICookie getCookie(String cookieName) {
+        for (ICookie cookie : cookies) {
+            if (cookie.getName().equals(cookieName)) {
+                return cookie;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Sets the Content-Length header to the current size of the response body
      *
@@ -255,6 +292,16 @@ public class HttpResponse {
             String headerValue = Utils.trim(split[1]);
 
             headers.put(headerName, headerValue);
+            
+            //handle cookies separately
+            if ("Set-Cookie".equalsIgnoreCase(headerName)) {
+                try {
+                    Cookie cookie = Cookie.parseCookie(headerValue);
+                    addCookie(cookie);
+                } catch (ParseException ex) {
+                    BaseExtender.printStackTrace(ex);
+                }
+            }
 
             currLine = bin.readLine();
         }
