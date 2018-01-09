@@ -16,6 +16,7 @@
 package burp.impl;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.logging.Level;
@@ -109,10 +110,15 @@ public class CookieTest {
      */
     @Test
     public void testGetExpiration() {
-        System.out.println("getExpiration");
-        Date expResult = new Date(OffsetDateTime.parse("2019-12-27T17:15:15+00:00").toInstant().toEpochMilli());
-        Date result = cookieToTest.getExpiration();
-        assertEquals(expResult, result);
+        try {
+            System.out.println("getExpiration");
+            SimpleDateFormat format = new SimpleDateFormat("MM dd yyyy HH mm ss X");
+            Date expResult = format.parse("12 27 2019 17 15 15 +00:00");
+            Date result = cookieToTest.getExpiration();
+            assertEquals(expResult, result);
+        } catch (ParseException ex) {
+            //go buy a lotto ticket
+        }
     }
 
     /**
