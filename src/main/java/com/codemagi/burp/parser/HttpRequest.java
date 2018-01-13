@@ -1,7 +1,9 @@
 package com.codemagi.burp.parser;
 
 import burp.ICookie;
+import burp.IParameter;
 import burp.impl.Cookie;
+import burp.impl.Parameter;
 import com.codemagi.burp.Utils;
 import java.io.*;
 import java.net.URL;
@@ -39,9 +41,13 @@ public class HttpRequest {
     protected String body;
     protected LinkedHashMap<String, String> headers = new LinkedHashMap<>();
     protected LinkedHashMap<String, String> sortedHeaders = null;
-    protected LinkedHashMap<String, String> params = new LinkedHashMap<>();
     protected LinkedHashMap<String, String> sortedParams = null;
+    protected List<Parameter> parameters = new ArrayList<>();
 
+    public final static char CR  = (char) 0x0D;
+    public final static char LF  = (char) 0x0A; 
+    public final static String CRLF  = "" + CR + LF;
+    
     /**
      * Private no-argument constructor is only used internally by static factory
      * methods.
@@ -125,20 +131,53 @@ public class HttpRequest {
         StringBuilder bodyBuilder = new StringBuilder();
         boolean first = true;
 
-        for (Map.Entry param : params.entrySet()) {
+        for (Parameter param : parameters) {
 
             if (!first) {
                 bodyBuilder.append("&");
             }
 
-            bodyBuilder.append(param.getKey());
+            bodyBuilder.append(param.getName());
             bodyBuilder.append("=");
             bodyBuilder.append(param.getValue());
 
             first = false;
         }
         this.body = bodyBuilder.toString();
-        this.params = new LinkedHashMap<>();
+        this.parameters = new ArrayList<>();
+        this.sortedParams = null;
+    }
+    
+    /**
+     * Converts a GET request to a Multipart/form-data request: changes request 
+     * method to POST, adds Content-Type/boundary header and moves any URL 
+     * parameters to the HTTP message body, formatted as a multipart request.
+     */
+    public void convertToMultipart() {
+        this.method = "POST";
+        
+        String boundary = UUID.randomUUID().toString().replaceAll("-", "");
+        setHeader("Content-Type", "multipart/form-data; boundary=----" + boundary);
+        
+        //add parameters, if available 
+        StringBuilder bodyBuilder = new StringBuilder();
+
+        for (Parameter param : parameters) {
+            bodyBuilder.append("------").append(boundary).append(CRLF);
+            bodyBuilder.append("Content-Disposition: form-data; name=\"").append(param.getName()).append("\"");
+            if (param.getType() == IParameter.PARAM_MULTIPART_ATTR) {
+                bodyBuilder.append("; filename=\"").append(param.getFilename()).append("\"").append(CRLF);
+                bodyBuilder.append("Content-Type: ").append(param.getContentType());
+            }
+            bodyBuilder.append(CRLF).append(CRLF);
+            
+            bodyBuilder.append(param.getValue());
+            bodyBuilder.append(CRLF);
+        }
+        bodyBuilder.append("------").append(boundary).append("--").append(CRLF);
+
+        this.body = bodyBuilder.toString();
+        this.parameters = new ArrayList<>();
         this.sortedParams = null;
     }
 
@@ -266,11 +305,20 @@ public class HttpRequest {
      *
      * @param name The parameter name to set
      * @param value The parameter value to set
-     * @return the previous value or null if the field was previously unset.
      */
-    public String setParameter(String name, String value) {
+    public void setParameter(String name, String value) {
         sortedParams = null;
-        return params.put(name, value);
+        parameters.add(new Parameter(name, value));
+    }
+
+    /**
+     * Sets a parameter using a Parameter object.
+     *
+     * @param param The parameter to add
+     */
+    public void setParameter(Parameter param) {
+        sortedParams = null;
+        parameters.add(param);
     }
 
     /**
@@ -301,14 +349,14 @@ public class HttpRequest {
             return sortedParams;
         }
 
-        sortedParams = new LinkedHashMap<>(params.size());
+        sortedParams = new LinkedHashMap<>(parameters.size());
 
-        List<Map.Entry> entries = new ArrayList(params.entrySet());
+        List<Parameter> entries = new ArrayList(parameters);
 
         Collections.sort(entries, new ParameterComparator());
 
-        for (Map.Entry entry : entries) {
-            String name = (String) entry.getKey();
+        for (Parameter entry : entries) {
+            String name = (String) entry.getName();
             String value = (String) entry.getValue();
 
             sortedParams.put(name, value);
@@ -430,7 +478,7 @@ public class HttpRequest {
     }
 
     /**
-     * Parses a String of HTTP parameters into the internal params data
+     * Parses a String of HTTP parameters into the internal parameters data
      * structure. No input checking or decoding is performed!
      *
      * @param input A String of HTTP parameters in the form of:
@@ -444,7 +492,7 @@ public class HttpRequest {
             String value = (pair.length > 1) ? pair[1] : null;
 
             if (name != null) {
-                params.put(name, value);
+                setParameter(name, value);
             }
         }
     }
@@ -458,18 +506,18 @@ public class HttpRequest {
         output.append(path);
 
         //add parameters, if available 
-        if (!params.isEmpty()) {
+        if (!parameters.isEmpty()) {
             output.append("?");
 
             boolean first = true;
 
-            for (Map.Entry param : params.entrySet()) {
+            for (Parameter param : parameters) {
 
                 if (!first) {
                     output.append("&");
                 }
 
-                output.append(param.getKey());
+                output.append(param.getName());
                 output.append("=");
                 output.append(Utils.noNulls(param.getValue()));
 
