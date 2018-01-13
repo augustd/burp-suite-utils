@@ -14,7 +14,7 @@ Add the following Maven dependency to pom.xml:
 <dependency>
   <groupId>com.codemagi</groupId>
   <artifactId>burp-suite-utils</artifactId>
-  <version>1.0.0</version>
+  <version>LATEST</version>
 </dependency>
 ```
 Add the Maven Shade Plugin to your project's plugins to create a plugin jar that includes all dependencies: 

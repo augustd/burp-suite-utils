@@ -8,22 +8,24 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
 
     private Integer start;
     private int end;
-    private String match;
+    private String fullMatch;
+    private String matchGroup;
     private String type;
     private ScanIssueSeverity severity;
     private ScanIssueConfidence confidence;
+    private MatchRule rule;
 
     public ScannerMatch(int start, int end, String match, String type) {
 	this.start = start;
 	this.end = end;
-	this.match = match;
+	this.matchGroup = match;
 	this.type = type;
     }
 
     public ScannerMatch(Integer start, int end, String match, String type, ScanIssueSeverity severity) {
 	this.start = start;
 	this.end = end;
-	this.match = match;
+	this.matchGroup = match;
 	this.type = type;
 	this.severity = severity;
     }
@@ -31,9 +33,21 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
     public ScannerMatch(Integer start, int end, String match, MatchRule rule) {
 	this.start = start;
 	this.end = end;
-	this.match = match;
+	this.matchGroup = match;
+        this.rule = rule;
 	this.type = rule.getType();
 	this.severity = rule.getSeverity();
+        this.confidence = rule.getConfidence();
+    }
+
+    public ScannerMatch(Integer start, int end, String fullMatch, String matchGroup, MatchRule rule) {
+        this.start = start;
+        this.end = end;
+        this.fullMatch = fullMatch;
+        this.matchGroup = matchGroup;
+        this.rule = rule;
+        this.type = rule.getType();
+        this.severity = rule.getSeverity();
         this.confidence = rule.getConfidence();
     }
 
@@ -45,10 +59,18 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
 	return end;
     }
 
-    public String getMatch() {
-	return match;
+    public String getFullMatch() {
+        return fullMatch;
     }
 
+    public String getMatchGroup() {
+        return matchGroup;
+    }
+
+    public MatchRule getRule() {
+        return rule;
+    }
+    
     public String getType() {
 	return type;
     }    
