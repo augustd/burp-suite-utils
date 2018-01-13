@@ -4,9 +4,18 @@ import burp.ICookie;
 import burp.IExtensionHelpers;
 import burp.IResponseInfo;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -218,6 +227,70 @@ public class Utils {
 
 	}
 
+    }
+
+    /**
+     * Returns the <code>String</code> contents of an ASCII file.
+     * <p>
+     * This method throws any fileIO errors.
+     *
+     * @param file File to read.
+     * @return String The contents of the file as a String.
+     * @throws Exception Any fileIO errors
+     */
+    public static String getFileAsString(File file) throws FileNotFoundException, IOException  {
+        byte[] inputbytes;
+        try (RandomAccessFile inputFile = new RandomAccessFile(file, "r")) {
+            int length = (int) inputFile.length();
+            inputbytes = new byte[length];
+            int numread = inputFile.read(inputbytes);
+        }
+        return new String(inputbytes);
+    }
+    
+    /**
+     * URL decodes an input String using the UTF-8 character set
+     * (IExtensionHelpers class uses LATIN-1)
+     *
+     * @param input The String to decode
+     * @return The URL-decoded String
+     */
+    public static String urlDecode(String input) {
+        try {
+            return URLDecoder.decode(input, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            throw new AssertionError("UTF-8 not supported", ex);
+        }
+    }
+
+    /**
+     * URL encodes an input String using the UTF-8 character set
+     * (IExtensionHelpers class uses LATIN-1)
+     *
+     * @param input The String to encode
+     * @return The URL-encoded String
+     */
+    public static String urlEncode(String input) {
+        try {
+            return URLEncoder.encode(input, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            throw new AssertionError("UTF-8 not supported", ex);
+        }
+    }
+
+    public static byte[] hash(String input, String algorithm) {
+        return hash(input.getBytes(UTF8), algorithm);
+    }
+    
+    public static byte[] hash(byte[] input, String algorithm) {
+        byte[] output = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance(algorithm);
+            output = md.digest(input);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return output;
     }
 
 }
