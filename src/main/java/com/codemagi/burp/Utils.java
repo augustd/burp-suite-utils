@@ -4,8 +4,12 @@ import burp.ICookie;
 import burp.IExtensionHelpers;
 import burp.IResponseInfo;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -248,6 +252,25 @@ public class Utils {
 
     }
 
+    /**
+     * Returns the <code>String</code> contents of an ASCII file.
+     * <p>
+     * This method throws any fileIO errors.
+     *
+     * @param file File to read.
+     * @return String The contents of the file as a String.
+     * @throws Exception Any fileIO errors
+     */
+    public static String getFileAsString(File file) throws FileNotFoundException, IOException  {
+        byte[] inputbytes;
+        try (RandomAccessFile inputFile = new RandomAccessFile(file, "r")) {
+            int length = (int) inputFile.length();
+            inputbytes = new byte[length];
+            int numread = inputFile.read(inputbytes);
+        }
+        return new String(inputbytes);
+    }
+    
     /**
      * URL decodes an input String using the UTF-8 character set
      * (IExtensionHelpers class uses LATIN-1)
