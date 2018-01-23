@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/augustd/burp-suite-utils.svg?branch=master)](https://travis-ci.org/augustd/burp-suite-utils)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.codemagi/burp-suite-utils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.codemagi/burp-suite-utils)
-
+[![Dependency Status](https://www.versioneye.com/user/projects/5a66882e0fb24f0fd976ff12/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a66882e0fb24f0fd976ff12)
 
 # burp-suite-utils
 Utilities for creating Burp Suite Extensions, including the [Burp Extensions API](https://portswigger.net/burp/extender/api/index.html) interfaces. 
