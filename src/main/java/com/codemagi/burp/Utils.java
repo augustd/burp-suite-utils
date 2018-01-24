@@ -259,7 +259,8 @@ public class Utils {
      *
      * @param file File to read.
      * @return String The contents of the file as a String.
-     * @throws Exception Any fileIO errors
+     * @throws java.io.FileNotFoundException If the input file cannot be found
+     * @throws java.io.IOException If other I/O errors occur
      */
     public static String getFileAsString(File file) throws FileNotFoundException, IOException  {
         byte[] inputbytes;

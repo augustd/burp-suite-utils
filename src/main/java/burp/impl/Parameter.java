@@ -42,10 +42,10 @@ public class Parameter implements IParameter {
      * Used to explicitly create a multipart parameter. Automatically sets the 
      * type attribute to IParameter.PARAM_MULTIPART_ATTR. 
      * 
-     * @param name
-     * @param value
-     * @param filename
-     * @param contentType 
+     * @param name HTTP parameter name
+     * @param value HTTP parameter value
+     * @param filename Filename for HTTP Multipart parameter 
+     * @param contentType Content-Type for HTTP Multipart parameter
      */
     public Parameter(String name, String value, String filename, String contentType) {
         this.name = name;

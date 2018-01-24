@@ -39,12 +39,9 @@ public class Cookie implements ICookie {
     /**
      * Parses a cookie from a String containing the raw HTTP response header 
      * _value_ (Minus "Set-Cookie:"). 
-     * The first line of input is
-     * save in the protected <tt>command</tt> variable. The subsequent lines are
-     * put into a linked hash as field/value pairs. Input is parsed until a
-     * blank line is reached, after which any data should appear.
      *
      * @param rawCookie A String containing the raw cookie 
+     * @return A Cookie object parsed from the raw cookie string 
      * @throws ParseException if the cookie does not have at least a name
      */
     public static Cookie parseCookie(String rawCookie) throws ParseException {
