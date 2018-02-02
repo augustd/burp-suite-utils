@@ -133,25 +133,25 @@ public class ToolsScopeComponent extends javax.swing.JPanel {
         boolean selected = false;
         switch (tool) {
             case IBurpExtenderCallbacks.TOOL_PROXY:
-                selected = jCheckBoxProxy.isSelected() && jCheckBoxProxy.isEnabled();
+                selected = jCheckBoxProxy.isSelected();
                 break;
             case IBurpExtenderCallbacks.TOOL_REPEATER:
-                selected = jCheckBoxRepeater.isSelected() && jCheckBoxRepeater.isEnabled();
+                selected = jCheckBoxRepeater.isSelected();
                 break;
             case IBurpExtenderCallbacks.TOOL_SCANNER:
-                selected = jCheckBoxScanner.isSelected() && jCheckBoxScanner.isEnabled();
+                selected = jCheckBoxScanner.isSelected();
                 break;
             case IBurpExtenderCallbacks.TOOL_INTRUDER:
-                selected = jCheckBoxIntruder.isSelected() && jCheckBoxIntruder.isEnabled();
+                selected = jCheckBoxIntruder.isSelected();
                 break;
             case IBurpExtenderCallbacks.TOOL_SEQUENCER:
-                selected = jCheckBoxSequencer.isSelected() && jCheckBoxSequencer.isEnabled();
+                selected = jCheckBoxSequencer.isSelected();
                 break;
             case IBurpExtenderCallbacks.TOOL_SPIDER:
-                selected = jCheckBoxSpider.isSelected() && jCheckBoxSpider.isEnabled();
+                selected = jCheckBoxSpider.isSelected();
                 break;
             case IBurpExtenderCallbacks.TOOL_EXTENDER:
-                selected = jCheckBoxExtender.isSelected() && jCheckBoxExtender.isEnabled();
+                selected = jCheckBoxExtender.isSelected();
                 break;
             case IBurpExtenderCallbacks.TOOL_TARGET:
                 break;
