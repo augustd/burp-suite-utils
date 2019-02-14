@@ -2,6 +2,7 @@ package com.codemagi.burp;
 
 import burp.ICookie;
 import burp.IExtensionHelpers;
+import burp.IRequestInfo;
 import burp.IResponseInfo;
 import java.io.BufferedReader;
 import java.io.File;
@@ -197,9 +198,31 @@ public class Utils {
     }
     
     public static byte[] getResponseBody(byte[] response, IExtensionHelpers helpers) {
+        if (response == null) return response;
         IResponseInfo responseInfo = helpers.analyzeResponse(response);
         int offset = responseInfo.getBodyOffset();
         return Arrays.copyOfRange(response, offset, response.length);
+    }
+    
+    public static byte[] getResponseHeaders(byte[] response, IExtensionHelpers helpers) {
+        if (response == null) return response;
+        IResponseInfo responseInfo = helpers.analyzeResponse(response);
+        int offset = responseInfo.getBodyOffset();
+        return Arrays.copyOfRange(response, 0, offset);
+    }
+    
+    public static byte[] getRequestBody(byte[] request, IExtensionHelpers helpers) {
+        if (request == null) return request;
+        IRequestInfo requestInfo = helpers.analyzeRequest(request);
+        int offset = requestInfo.getBodyOffset();
+        return Arrays.copyOfRange(request, offset, request.length);
+    }
+    
+    public static byte[] getRequestHeaders(byte[] request, IExtensionHelpers helpers) {
+        if (request == null) return request;
+        IRequestInfo requestInfo = helpers.analyzeRequest(request);
+        int offset = requestInfo.getBodyOffset();
+        return Arrays.copyOfRange(request, 0, offset);
     }
     
     public static <T>T getFirst(List<T> list) {
