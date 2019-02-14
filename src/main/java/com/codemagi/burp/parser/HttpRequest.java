@@ -38,7 +38,7 @@ public class HttpRequest {
     protected String method;
     protected String path;
     protected String version;
-    protected String body;
+    protected String body = "";
     protected LinkedHashMap<String, String> headers = new LinkedHashMap<>();
     protected LinkedHashMap<String, String> sortedHeaders = null;
     protected LinkedHashMap<String, String> sortedParams = null;
@@ -444,10 +444,11 @@ public class HttpRequest {
 
         //parse the POST body, if there is one
         if (currLine != null) {
-            currLine = bin.readLine();
-            if (currLine != null) {
-                body = currLine;
+            StringBuilder bodyBuilder = new StringBuilder();
+            while ((currLine = bin.readLine()) != null) {
+                bodyBuilder.append(currLine).append("\n");
             }
+            body = bodyBuilder.toString();
         }
 
     }
