@@ -18,7 +18,6 @@ import javax.swing.JTabbedPane;
 public class BurpSuiteTab extends javax.swing.JPanel implements ITab {
     IBurpExtenderCallbacks mCallbacks;
     String tabName; 
-    JPanel userDefinedPanel;
     
     /**
      * Creates new form BurpSuiteTab
@@ -35,6 +34,7 @@ public class BurpSuiteTab extends javax.swing.JPanel implements ITab {
     
     public void addComponent(JPanel customPanel) {
         this.add(customPanel);
+        mCallbacks.customizeUiComponent(customPanel);
         this.revalidate();
         this.doLayout();
     }
