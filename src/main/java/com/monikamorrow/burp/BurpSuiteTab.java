@@ -6,12 +6,17 @@ import java.awt.Color;
 import java.awt.Component;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 /**
- *
+ * Creates a new top-level tab in Burp Suite. The tab is initialized by default with a 
+ * vertical BoxLayout so that sub-components are arranged in a single vertical column
+ * like standard Burp Suite options tabs. Use the setLayout() method to change.  
+ * 
  * @author Monika Morrow Original URL: https://github.com/monikamorrow/Burp-Suite-Extension-Examples/tree/master/GUI%20Utils
  * @author August Detlefsen
  */
@@ -32,6 +37,9 @@ public class BurpSuiteTab extends javax.swing.JPanel implements ITab {
 
         mCallbacks.customizeUiComponent(this);
         mCallbacks.addSuiteTab(this);
+        
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); 
     }
 
     public void addComponent(JPanel customPanel) {
