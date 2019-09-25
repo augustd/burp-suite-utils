@@ -121,9 +121,14 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 			Matcher matcher = rule.getPattern().matcher(response);
 			while (matcher.find()) {
 				//get the actual match
-				String group;
+				String group = "";
 				if (rule.getMatchGroup() != null) {
-					group = matcher.group(rule.getMatchGroup());
+					try {
+						group = matcher.group(rule.getMatchGroup());
+					} catch (ArrayIndexOutOfBoundsException aioobe) {
+						//this could happen if there is a partial match -for example a match rule missing a version
+						group = matcher.group();
+					}
 				} else {
 					group = matcher.group();
 				}
