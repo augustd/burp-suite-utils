@@ -1,5 +1,7 @@
 package com.codemagi.burp;
 
+import java.util.regex.Pattern;
+
 /**
  *
  * @author August Detlefsen [augustd at codemagi dot com]
@@ -70,6 +72,10 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
     public MatchRule getRule() {
         return rule;
     }
+	
+	public Pattern getPattern() {
+		return rule.getPattern();
+	}
     
     public String getType() {
 	return type;
