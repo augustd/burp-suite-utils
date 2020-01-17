@@ -5,9 +5,11 @@ import javax.swing.JTabbedPane;
 
 /**
  * Creates a JTabbedPane customized to work with Burp. Includes: 
+ * <ul>
  * <li>Ability to rename tabs</li>
  * <li>Ability to close tabs</li>
  * <li>Burp-like UI</li>
+ * </ul>
  * 
  * @author August Detlefsen [augustd at codemagi dot com]
  */
