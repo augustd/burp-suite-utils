@@ -21,9 +21,9 @@ public class BurpTabbedPane extends JTabbedPane {
 	/**
 	 * Add a new re-nameable, closable tab to the tabbed pane.
 	 *
-	 * @param name
-	 * @param component
-	 * @return
+	 * @param name The name of the tab
+	 * @param component The Component to display when the tab is active
+	 * @return The Component that was added
 	 */
 	@Override
 	public Component add(String name, Component component) {
@@ -42,9 +42,8 @@ public class BurpTabbedPane extends JTabbedPane {
 	 * NOTE: There can be only one <i>last tab</i>. Calling this method again
 	 * will replace the one previously added.
 	 *
-	 * @param name
-	 * @param component
-	 * @return
+	 * @param name The name of the tab
+	 * @param component The Component to display when the tab is active
 	 */
 	public void addLast(String name, Component component) {
 		if (hasLast) {
