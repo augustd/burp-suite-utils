@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.DefaultCellEditor;
@@ -103,42 +104,45 @@ public class RuleTableComponent extends javax.swing.JPanel {
      * Load match rules from a URL
      */
     private boolean loadMatchRules(String rulesUrl) {
-	//load match rules from file
-	try {
-            //check for file URL 
+        //load match rules from file
+        try {
+            //check for file URL
             if (rulesUrl != null && rulesUrl.toLowerCase().startsWith("file:")) {
                 return loadMatchRulesFromFile(rulesUrl);
             }
-            
-            //request match rules from remote URL 
-    	    mCallbacks.printOutput("Loading match rules from: " + rulesUrl);
-	    URL url = new URL(rulesUrl);
+
+            //request match rules from remote URL
+            mCallbacks.printOutput("Loading match rules from: " + rulesUrl);
+            URL url = new URL(rulesUrl);
             IHttpService service = new HttpService(url);
             HttpRequest request = new HttpRequest(url);
-            byte[] responseBytes = mCallbacks.makeHttpRequest(
-                    service.getHost(), 
-                    service.getPort(), 
-                    HttpService.PROTOCOL_HTTPS.equalsIgnoreCase(service.getProtocol()), 
-                    request.getBytes());
-            
+            HttpRequestThread requestThread = new HttpRequestThread(service, request.getBytes(), BaseExtender.getCallbacks());
+            byte[] responseBytes = null;
+            try {
+                TimeLimitedCodeBlock.runWithTimeout(requestThread, 60, TimeUnit.SECONDS);
+                responseBytes = requestThread.getResponse();
+            } catch (Exception ex) {
+                BaseExtender.printStackTrace(ex);
+            }
+
             //parse the response
-            if (responseBytes == null) return false; //no response received from server 
+            if (responseBytes == null) return false; //no response received from server
             HttpResponse response = HttpResponse.parseMessage(responseBytes);
-            
-	    //read match rules from the response
+
+            //read match rules from the response
             Reader is = new StringReader(response.getBody());
-	    BufferedReader reader = new BufferedReader(is);
-	    
+            BufferedReader reader = new BufferedReader(is);
+
             processMatchRules(reader);
-                        
+
             return true;
 
-	} catch (IOException e) {
-	    scan.printStackTrace(e);
-	} catch (Exception e) {
-	    scan.printStackTrace(e);
+        } catch (IOException e) {
+            scan.printStackTrace(e);
+        } catch (Exception e) {
+            scan.printStackTrace(e);
         }
-        
+
         return false;
     }
     
