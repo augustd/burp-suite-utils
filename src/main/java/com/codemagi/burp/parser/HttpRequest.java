@@ -24,7 +24,7 @@ import java.util.regex.*;
  * <p>
  * This class will parse all the header/value pairs and store them in a
  * ({@link java.util.LinkedHashMap}), and parse the first line as 'command'. The
- * <tt>LinkedHashMap</tt> will assure that an iterator will visit the fields in
+ * <code>LinkedHashMap</code> will assure that an iterator will visit the fields in
  * the order the were originally sent/parsed.
  *
  * Note that parameters sent in the body of POST requests are not parsed.

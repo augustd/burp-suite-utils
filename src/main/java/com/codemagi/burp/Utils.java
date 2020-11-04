@@ -56,6 +56,8 @@ public class Utils {
     
     /**
      * Returns the human-readable tool name for the passed tool flag
+     * 
+     * @param toolFlag integer identifying the Burp tool to get the name for 
      */
     public static String getToolName(int toolFlag) {
         return noNulls(TOOLS.get(toolFlag));

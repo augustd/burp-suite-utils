@@ -33,7 +33,7 @@ public class MessagePanel extends javax.swing.JPanel {
      * Sets the clear delay: The amount of time (in milliseconds) before
      * messages posted to the panel will be automatically cleared.
      *
-     * @param newValue
+     * @param newValue number of milliseconds for the message to persist
      */
     public void setClearDelay(int newValue) {
         clearDelay = newValue;

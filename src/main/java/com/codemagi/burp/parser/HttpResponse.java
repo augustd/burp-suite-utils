@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * <p>
  * This class will parse all the header/value pairs and store them in a
  * ({@link java.util.LinkedHashMap}), and parse the first line as 'command'. The
- * <tt>LinkedHashMap</tt> will assure that an iterator will visit the fields in
+ * <code>LinkedHashMap</code> will assure that an iterator will visit the fields in
  * the order they were originally sent/parsed.
  *
  * The body of the HTTP response is stored as-is in the 'body' member.
@@ -178,7 +178,7 @@ public class HttpResponse {
     }
     
     /**
-     * Returns the _first_ cookie matching <tt>cookieName</tt>. Objects returned
+     * Returns the _first_ cookie matching <code>cookieName</code>. Objects returned
      * by this method are of the class burp.impl.Cookie which implements the
      * burp.ICookie interface.
      *
