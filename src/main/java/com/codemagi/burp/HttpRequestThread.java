@@ -19,7 +19,20 @@ import burp.IBurpExtenderCallbacks;
 import burp.IHttpService;
 import burp.impl.HttpService;
 
+import java.util.concurrent.TimeUnit;
+
 /**
+ * Used to issue HTTP requests with a timeout:
+ * <code>
+ *     //issue request, with timeout
+ *     HttpService service = new HttpService(targetUrl);
+ *     HttpRequestThread requestThread = new HttpRequestThread(service, request.getBytes(), callbacks);
+ *     try {
+ *         TimeLimitedCodeBlock.runWithTimeout(requestThread, 60, TimeUnit.SECONDS);
+ *     } catch (Exception ex) {
+ *         BurpExtender.printStackTrace(ex);
+ *     }
+ * </code>
  *
  * @author adetlefsen
  */
