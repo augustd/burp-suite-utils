@@ -8,33 +8,29 @@ import java.util.regex.Pattern;
  */
 public class ScannerMatch implements Comparable<ScannerMatch> {
 
-    private Integer start;
-    private int end;
     private String fullMatch;
     private String matchGroup;
     private String type;
     private ScanIssueSeverity severity;
     private ScanIssueConfidence confidence;
     private MatchRule rule;
+    private Offsets offsets;
 
     public ScannerMatch(int start, int end, String match, String type) {
-	this.start = start;
-	this.end = end;
+        offsets = new Offsets(start, end);
 	this.matchGroup = match;
 	this.type = type;
     }
 
     public ScannerMatch(Integer start, int end, String match, String type, ScanIssueSeverity severity) {
-	this.start = start;
-	this.end = end;
+        offsets = new Offsets(start, end);
 	this.matchGroup = match;
 	this.type = type;
 	this.severity = severity;
     }
 
     public ScannerMatch(Integer start, int end, String match, MatchRule rule) {
-	this.start = start;
-	this.end = end;
+        offsets = new Offsets(start, end);
 	this.matchGroup = match;
         this.rule = rule;
 	this.type = rule.getType();
@@ -43,8 +39,7 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
     }
 
     public ScannerMatch(Integer start, int end, String fullMatch, String matchGroup, MatchRule rule) {
-        this.start = start;
-        this.end = end;
+        offsets = new Offsets(start, end);
         this.fullMatch = fullMatch;
         this.matchGroup = matchGroup;
         this.rule = rule;
@@ -53,12 +48,12 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
         this.confidence = rule.getConfidence();
     }
 
-    public int getStart() {
-	return start;
+    public Integer getStart() {
+	return offsets.getStart();
     }
 
-    public int getEnd() {
-	return end;
+    public Integer getEnd() {
+        return offsets.getEnd();
     }
 
     public String getFullMatch() {
@@ -73,9 +68,9 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
         return rule;
     }
 	
-	public Pattern getPattern() {
-		return rule.getPattern();
-	}
+    public Pattern getPattern() {
+            return rule.getPattern();
+    }
     
     public String getType() {
 	return type;
@@ -91,7 +86,11 @@ public class ScannerMatch implements Comparable<ScannerMatch> {
     
     @Override
     public int compareTo(ScannerMatch m) {
-        return start.compareTo(m.getStart());
+        return this.getStart().compareTo(m.getStart());
     }
     
+    public Offsets getOffsets() {
+        return offsets;
+    }
+
 }

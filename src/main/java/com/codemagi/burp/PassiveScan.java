@@ -7,6 +7,7 @@ import burp.IScannerInsertionPoint;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -157,15 +158,28 @@ public abstract class PassiveScan extends BaseExtender implements IScannerCheck 
 		if (!matches.isEmpty()) {
 			Collections.sort(matches); //matches must be in order
 			//get the offsets of scanner matches
-			List<int[]> startStop = new ArrayList<>(1);
+			LinkedList<Offsets> offsets = new LinkedList<>();
 			for (ScannerMatch match : matches) {
 				callbacks.printOutput("Processing match: " + match);
 				callbacks.printOutput("    start: " + match.getStart() + " end: " + match.getEnd() + " full match: " + match.getFullMatch() + " group: " + match.getMatchGroup());
 				//add a marker for code highlighting
-				startStop.add(new int[]{match.getStart(), match.getEnd()});
+				//startStop.add(new int[]{match.getStart(), match.getEnd()});
+                                Offsets matchOffsets = match.getOffsets();
+                                if (!matchOffsets.overlaps(offsets.peekLast())) {
+                                    offsets.add(match.getOffsets());
+                                } else {
+                                    //if the new offsets overlap, combine them into one and add them to the list
+                                    Offsets combinedOffsets = matchOffsets.combine(offsets.pop());
+                                    offsets.add(combinedOffsets);
+                                }
 			}
+                        List<int[]> startStop = new ArrayList<>(1);
+                        for (Offsets os : offsets) {
+                            startStop.add(os.toArray());
+                        }
 			issues.add(getScanIssue(baseRequestResponse, matches, startStop));
 			callbacks.printOutput("issues: " + issues.size());
+                        callbacks.printOutput("offsets: " + offsets.size());
 		}
 		
 		return issues;
