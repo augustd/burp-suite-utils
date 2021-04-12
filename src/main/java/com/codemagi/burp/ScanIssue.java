@@ -59,7 +59,7 @@ public class ScanIssue implements IScanIssue, Comparable<ScanIssue> {
 		this.severity = severity;
 		this.confidence = confidence;
 	}
-	
+
 	public ScanIssue(IScanIssue existing) {
 		this.httpService = existing.getHttpService();
 		this.url = existing.getUrl();
